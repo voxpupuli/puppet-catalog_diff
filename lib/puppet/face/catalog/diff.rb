@@ -55,6 +55,10 @@ Puppet::Face.define(:catalog, '0.0.1') do
       default_to { "10" }
     end
 
+    option "--certless" do
+      summary "Use the certless catalog API (Puppet >= 6.3.0)"
+    end
+
     description <<-'EOT'
       Prints the differences between catalogs compiled by different puppet master to help
       during migrating to a new Puppet version.
