@@ -39,13 +39,17 @@ module Puppet::CatalogDiff
     def compile_catalog(node_name,server)
       server,environment = server.split('/')
       environment ||= lookup_environment(node_name)
-      endpoint = "/puppet/v3/catalog/#{node_name}?environment=#{environment}"
+      endpoint = "/puppet/v4/catalog/"
       server,port = server.split(':')
       port ||= '8140'
+      body = {
+        certname: node_name,
+        environment: environment,
+      }
       Puppet.debug("Connecting to server: #{server}")
       begin
         connection = Puppet::Network::HttpPool.http_instance(server,port)
-        catalog = connection.request_get(endpoint, {"Accept" => 'pson'}).body
+        catalog = connection.request_post(endpoint, body.to_json, {"Accept" => 'pson'}).body
       rescue Exception => e
         raise "Failed to retrieve catalog for #{node_name} from #{server} in environment #{environment}: #{e.message}"
       end
