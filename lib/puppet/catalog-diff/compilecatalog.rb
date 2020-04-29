@@ -51,8 +51,8 @@ module Puppet::CatalogDiff
         },
       }
       headers = {
-        'Content-Type': 'text/json',
-        'Accept': 'pson',
+        'Content-Type' => 'text/json',
+        'Accept' => 'pson',
       }
       Puppet.debug("Connecting to server: #{server}")
       begin
