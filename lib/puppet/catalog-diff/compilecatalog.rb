@@ -39,7 +39,7 @@ module Puppet::CatalogDiff
     def compile_catalog(node_name,server)
       server,environment = server.split('/')
       environment ||= lookup_environment(node_name)
-      endpoint = "/puppet/v4/catalog/"
+      endpoint = "/puppet/v4/catalog"
       server,port = server.split(':')
       port ||= '8140'
       body = {
