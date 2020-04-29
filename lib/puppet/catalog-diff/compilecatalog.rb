@@ -45,6 +45,10 @@ module Puppet::CatalogDiff
       body = {
         certname: node_name,
         environment: environment,
+        persistence: {
+          facts: false,
+          catalog: false,
+        },
       }
       Puppet.debug("Connecting to server: #{server}")
       begin
