@@ -50,7 +50,7 @@ module Puppet::CatalogDiff
           if options[:show_resource_diff]
             Puppet.debug("Resource diff: #{resource[:resource_id]}")
 
-            diff_array = str_diff(
+            diff_array = self.str_diff(
                            Puppet::CatalogDiff::Formater.new().resource_to_string(resource),
                            Puppet::CatalogDiff::Formater.new().resource_to_string(new_resource)
                          ).split("\n")
@@ -68,7 +68,7 @@ module Puppet::CatalogDiff
           end
 
           if options[:content_diff] && resource[:parameters][:content] && new_resource[:parameters][:content] && resource[:parameters][:content][:checksum] != new_resource[:parameters][:content][:checksum]
-            content_differences[resource[:resource_id]] = str_diff(resource[:parameters][:content][:content], new_resource[:parameters][:content][:content])
+            content_differences[resource[:resource_id]] = self.str_diff(resource[:parameters][:content][:content], new_resource[:parameters][:content][:content])
           end
         end
 
