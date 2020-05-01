@@ -50,7 +50,7 @@ module Puppet::CatalogDiff
           if options[:show_resource_diff]
             Puppet.debug("Resource diff: #{resource[:resource_id]}")
 
-            diff_array = self.str_diff(
+            diff_array = str_diff(
                            Puppet::CatalogDiff::Formater.new().resource_to_string(resource),
                            Puppet::CatalogDiff::Formater.new().resource_to_string(new_resource)
                          ).split("\n")
@@ -68,7 +68,7 @@ module Puppet::CatalogDiff
           end
 
           if options[:content_diff] && resource[:parameters][:content] && new_resource[:parameters][:content] && resource[:parameters][:content][:checksum] != new_resource[:parameters][:content][:checksum]
-            content_differences[resource[:resource_id]] = self.str_diff(resource[:parameters][:content][:content], new_resource[:parameters][:content][:content])
+            content_differences[resource[:resource_id]] = str_diff(resource[:parameters][:content][:content], new_resource[:parameters][:content][:content])
           end
         end
 
@@ -110,7 +110,7 @@ module Puppet::CatalogDiff
       differences
     end
 
-    def self.do_str_diff(str1, str2)
+    def do_str_diff(str1, str2)
       paths = [str1,str2].collect do |s|
         tempfile = Tempfile.new("puppet-diffing")
         tempfile.open
@@ -123,13 +123,13 @@ module Puppet::CatalogDiff
       diff
     end
 
-    @cached_str_diffs = {}
-    def self.str_diff(str1, str2)
+    def str_diff(str1, str2)
+      @@cached_str_diffs ||= {}
       sum1 = Digest::MD5.hexdigest str1
       sum2 = Digest::MD5.hexdigest str2
-      @cached_str_diffs["#{sum1}/#{sum2}"] ||= do_str_diff(str1, str2)
+      @@cached_str_diffs["#{sum1}/#{sum2}"] ||= do_str_diff(str1, str2)
       paths.each { |f| f.delete }
-      @cached_str_diffs
+      @@cached_str_diffs
     end
   end
 end
