@@ -128,7 +128,6 @@ module Puppet::CatalogDiff
       sum1 = Digest::MD5.hexdigest str1
       sum2 = Digest::MD5.hexdigest str2
       @@cached_str_diffs["#{sum1}/#{sum2}"] ||= do_str_diff(str1, str2)
-      @@cached_str_diffs
     end
   end
 end
