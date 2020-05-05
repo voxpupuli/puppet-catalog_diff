@@ -91,26 +91,26 @@ Puppet::Face.define(:catalog, '0.0.1') do
                   catalog1, node_name,
                   master_server: options[:old_server],
                   certless: options[:certless],
-                  catalog_from_puppetdb: options[:old_catalog_from_puppetdb],
+                  catalog_from_puppetdb: options[:old_catalog_from_puppetdb]
                 )
                 new_server = Puppet::Face[:catalog, '0.0.1'].seed(
                   catalog2, node_name,
                   master_server: options[:new_server],
                   certless: options[:certless],
-                  catalog_from_puppetdb: options[:new_catalog_from_puppetdb],
+                  catalog_from_puppetdb: options[:new_catalog_from_puppetdb]
                 )
               else
                 new_server = Puppet::Face[:catalog, '0.0.1'].seed(
                   catalog2, node_name,
                   master_server: options[:new_server],
                   certless: options[:certless],
-                  catalog_from_puppetdb: options[:new_catalog_from_puppetdb],
+                  catalog_from_puppetdb: options[:new_catalog_from_puppetdb]
                 )
                 old_server = Puppet::Face[:catalog, '0.0.1'].seed(
                   catalog1, node_name,
                   master_server: options[:old_server],
                   certless: options[:certless],
-                  catalog_from_puppetdb: options[:old_catalog_from_puppetdb],
+                  catalog_from_puppetdb: options[:old_catalog_from_puppetdb]
                 )
               end
               mutex.synchronize { compiled_nodes + old_server[:compiled_nodes] }

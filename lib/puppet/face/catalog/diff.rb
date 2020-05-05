@@ -172,7 +172,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
           filter_local: options[:filter_local],
           certless: options[:certless],
           old_catalog_from_puppetdb: options[:old_catalog_from_puppetdb],
-          new_catalog_from_puppetdb: options[:new_catalog_from_puppetdb],
+          new_catalog_from_puppetdb: options[:new_catalog_from_puppetdb]
         )
         diff_output = Puppet::Face[:catalog, '0.0.1'].diff(old_catalogs, new_catalogs, options)
         nodes = diff_output
