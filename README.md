@@ -1,4 +1,11 @@
-# Overview
+# Puppet Catalog Diff
+
+[![Puppet Forge Version](http://img.shields.io/puppetforge/v/camptocamp/catalog_diff.svg)](https://forge.puppetlabs.com/camptocamp/catalog_diff)
+[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/camptocamp/catalog_diff.svg)](https://forge.puppetlabs.com/camptocamp/catalog_diff)
+[![Build Status](https://img.shields.io/travis/camptocamp/puppet-catalog-diff/master.svg)](https://travis-ci.org/camptocamp/puppet-catalog-diff)
+[![By Camptocamp](https://img.shields.io/badge/by-camptocamp-fb7047.svg)](http://www.camptocamp.com)
+
+## Overview
 
 A tool to compare two Puppet catalogs.
 
@@ -25,10 +32,10 @@ should contain only machines that have not been decommissioned in PuppetDB (impo
 as compiling their catalogs would also reactive them and their exports otherwise).
 
 
-# Usage
+## Usage
 
 
-## Set up node discovery
+### Set up node discovery
 
 Before starting you need one of two options:
 
@@ -36,7 +43,7 @@ Before starting you need one of two options:
 * or an access to PuppetDB to retrieve the nodes and their facts.
 
 
-### Set up with YAML files
+#### Set up with YAML files
 
 
 Start by copying or mounting the contents of your current master's
@@ -49,7 +56,7 @@ On the Puppetserver, the yamldir is at `/opt/puppetlabs/server/data/puppetserver
 It is not required to use a specific "diff" node , as you could use the "new" puppet server.
 
 
-### Set up with PuppetDB
+#### Set up with PuppetDB
 
 If you use the PuppetDB option (with `--use_puppetdb`), you'll need to either:
 
@@ -58,7 +65,7 @@ If you use the PuppetDB option (with `--use_puppetdb`), you'll need to either:
   PuppetDB
 
 
-## Set up auth.conf
+### Set up auth.conf
 
 
 Once you have set up the discovery, you need to allow access to the "diff" node to
@@ -106,7 +113,7 @@ If you are on Puppet 6, you can activate the certless API instead with:
 ```
 
 
-## Running
+### Running
 
 
 Example:
@@ -134,7 +141,7 @@ $ puppet catalog diff \
 ```
 
 
-## Multi threaded compile requests
+### Multi threaded compile requests
 
 You can change the number of concurrent connections to the masters by passing an interger
 to the `--threads` option. This will balence the catalogs evenly on the old and new
@@ -147,7 +154,7 @@ multiple CPUs this may be of limited use comparing local catalogs.  If the
 'parallel' gem is installed, then one process will be forked off per CPU on the
 system, allowing use of all CPUs.
 
-## Fact search
+### Fact search
 
 You can pass `--fact_search` to filter the list of nodes based on a single fact value.
 This currently defaults to `kernel=Linux` if you do not pass it. The yaml cache will be
@@ -156,7 +163,7 @@ facts is compiled a rest or puppetdb connection ( as mentioned above) filters th
 to only nodes who are "active" based typically on puppetdb. For more information on
 deactiving nodes in puppetdb see [this article](http://docs.puppetlabs.com/puppetdb/latest/maintain_and_tune.html)
 
-## Changed depth
+### Changed depth
 
 Once each catalog is compiled , it is saved to the /tmp directory on the system and the
 face will then automatically calculate the differences between the catalogs. Once this
@@ -164,7 +171,7 @@ is complete a summary of number of nodes with changes as well as nodes whose cat
 would not compile are listed. You can modify the number of nodes shown here using
 `--changed_depth` option.
 
-## Output Report
+### Output Report
 
 You can save the last report as json to a specific location using "`--output_report`"
 This report will contain the structured data in the format of running this command
@@ -174,7 +181,7 @@ save the output with escaped color. If you want to view that text report run
 `less -r lastrun-$$.log`
 
 
-## Limitations
+### Limitations
 
 This code only validates the catalogs, it cannot tell you if the behavior of
 the providers that interpret the catalog has changed so testing is still
@@ -189,7 +196,7 @@ viewed in markdown using the Rakefile in this directory.
 A web viewer is also available at [https://github.com/camptocamp/puppet-catalog-diff-viewer](https://github.com/camptocamp/puppet-catalog-diff-viewer)
 
 
-# Authors
+## Authors
 R.I.Pienaar <rip@devco.net> / www.devco.net / @ripienaar  
 Zack Smith <zack@puppetlabs.com> / @acidprime  
 Raphaël Pinson <raphael.pinson@camptocamp.com> / @raphink
