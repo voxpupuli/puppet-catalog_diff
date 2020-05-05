@@ -39,6 +39,7 @@ module Puppet::CatalogDiff
         sort_dependencies!(resource[:parameters])
 
         next if new_resource[:parameters] == resource[:parameters]
+
         parameters_in_old[resource[:resource_id]] = \
           Hash[(resource[:parameters].to_a - new_resource[:parameters].to_a)]
 
@@ -65,12 +66,8 @@ module Puppet::CatalogDiff
           differences_in_new[resource[:resource_id]] = new_resource
         end
 
-        if options[:content_diff] &&
-           resource[:parameters][:content] &&
-           new_resource[:parameters][:content] &&
-           resource[:parameters][:content][:checksum] != new_resource[:parameters][:content][:checksum]
-          content_differences[resource[:resource_id]] = str_diff(resource[:parameters][:content][:content], new_resource[:parameters][:content][:content])
-        end
+        cont_diff = str_diff(resource[:parameters][:content], new_resource[:parametes][:content])
+        content_differences[resource[:resource_id]] = cont_diff if cont_diff
       end
       resource_differences[:old] = differences_in_old
       resource_differences[:new] = differences_in_new
@@ -126,10 +123,29 @@ module Puppet::CatalogDiff
       diff
     end
 
-    def str_diff(str1, str2)
+    def str_diff(cont1, cont2)
+      return nil unless cont1 && cont2
+
+      if cont1.is_a?(Hash)
+        str1 = cont1[:content]
+        sum1 = cont1[:checksum]
+      else
+        str1 = cont1
+        sum1 = Digest::MD5.hexdigest(str1)
+      end
+
+      if cont2.is_a?(Hash)
+        str2 = cont2[:content]
+        sum2 = cont2[:checksum]
+      else
+        str2 = cont2
+        sum2 = Digest::MD5.hexdigest(str2)
+      end
+
+      return nil unless str1 && str2
+      return nil if sum1 == sum2
+
       @@cached_str_diffs ||= {}
-      sum1 = Digest::MD5.hexdigest str1
-      sum2 = Digest::MD5.hexdigest str2
       @@cached_str_diffs["#{sum1}/#{sum2}"] ||= do_str_diff(str1, str2)
     end
   end
