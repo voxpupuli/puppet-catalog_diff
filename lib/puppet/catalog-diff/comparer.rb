@@ -1,5 +1,7 @@
 require 'puppet/util/diff'
 require 'digest'
+require File.expand_path(File.join(File.dirname(__FILE__), 'formater.rb'))
+
 # Puppet::CatalogDiff
 module Puppet::CatalogDiff
   # Comparer providers methods
