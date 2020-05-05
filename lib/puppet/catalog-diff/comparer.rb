@@ -29,14 +29,6 @@ module Puppet::CatalogDiff
         new_resource = new.find { |res| res[:resource_id] == resource[:resource_id] }
         next if new_resource.nil?
 
-        # 0.24.x would set eg. on exec the command property to the same as name
-        # even when they were the same, 25 onward doesnt so get rid of these.
-        #
-        # there are no doubt many more
-        # resource[:parameters].delete(:name) unless new_resource[:parameters].include?(:name)
-        # resource[:parameters].delete(:command) unless new_resource[:parameters].include?(:command)
-        # resource[:parameters].delete(:path) unless new_resource[:parameters].include?(:path)
-
         if options[:ignore_parameters]
           blacklist = options[:ignore_parameters].split(',')
           filter_parameters!(new_resource[:parameters], blacklist)
