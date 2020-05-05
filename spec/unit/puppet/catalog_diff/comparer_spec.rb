@@ -58,13 +58,13 @@ describe Puppet::CatalogDiff::Comparer do
     ]
   end
 
-  describe :extract_titles do
+  describe 'extract_titles' do
     it 'returns resource ids' do
       extract_titles(resources1).should eq(['foo', 'bar'])
     end
   end
 
-  describe :compare_resources do
+  describe 'compare_resources' do
     it 'returns a diff without options' do
       diffs = compare_resources(res1, res2, {})
       expect(diffs[:old]).to eq(res1[0][:resource_id] => res1[0])
@@ -87,7 +87,7 @@ describe Puppet::CatalogDiff::Comparer do
     end
   end
 
-  describe :return_resource_diffs do
+  describe 'return_resource_diffs' do
     it 'returns differences' do
       diffs = return_resource_diffs(extract_titles(resources1), extract_titles(resources2))
       expect(diffs[:titles_only_in_old]).to eq(['bar'])
@@ -95,7 +95,7 @@ describe Puppet::CatalogDiff::Comparer do
     end
   end
 
-  describe :do_str_diff do
+  describe 'do_str_diff' do
     it 'diffs two strings' do
       diff = do_str_diff('abc', 'abd')
       expect(diff).to match(/^-abc$/)
@@ -103,7 +103,7 @@ describe Puppet::CatalogDiff::Comparer do
     end
   end
 
-  describe :str_diff do
+  describe 'str_diff' do
     context 'when passing strings' do
       it 'diffs two strings' do
         diff = str_diff('abc', 'abd')
