@@ -16,11 +16,8 @@ module Puppet::CatalogDiff
       rescue Exception => e
         Puppet.err("Server returned invalid catalog for #{node_name}")
         save_catalog_to_disk(save_directory, node_name, catalog, 'error')
-        if catalog =~ %r{.document_type.:.Catalog.}
-          raise e.message
-        else
-          raise catalog
-        end
+        raise e.message if catalog =~ %r{.document_type.:.Catalog.}
+        raise catalog
       end
     end
 
