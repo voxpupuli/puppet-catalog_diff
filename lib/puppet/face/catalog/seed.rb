@@ -61,7 +61,12 @@ Puppet::Face.define(:catalog, '0.0.1') do
         Thread.new(nodes, compiled_nodes, options) do |nodes, compiled_nodes, options|
           while node_name = mutex.synchronize { nodes.pop }
             begin
-              compiled = Puppet::CatalogDiff::CompileCatalog.new(node_name, save_directory, options[:master_server], options[:certless], options[:catalog_from_puppetdb])
+              _compiled = Puppet::CatalogDiff::CompileCatalog.new(
+                node_name, save_directory,
+                options[:master_server],
+                options[:certless],
+                options[:catalog_from_puppetdb]
+              )
               mutex.synchronize { compiled_nodes << node_name }
             rescue Exception => e
               Puppet.err("Unable to compile catalog for #{node_name}\n\t#{e}")
