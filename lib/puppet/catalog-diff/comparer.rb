@@ -66,7 +66,7 @@ module Puppet::CatalogDiff
           differences_in_new[resource[:resource_id]] = new_resource
         end
 
-        cont_diff = str_diff(resource[:parameters][:content], new_resource[:parametes][:content])
+        cont_diff = str_diff(resource[:parameters][:content], new_resource[:parameters][:content])
         content_differences[resource[:resource_id]] = cont_diff if cont_diff
       end
       resource_differences[:old] = differences_in_old
