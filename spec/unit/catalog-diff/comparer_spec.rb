@@ -3,53 +3,66 @@ require 'puppet/catalog-diff/comparer'
 
 describe Puppet::CatalogDiff::Comparer do
   include Puppet::CatalogDiff::Comparer
-  describe :extract_titles do
-    let(:resources) do
-      [
-        {
-          resource_id: 'foo',
-        },
-        {
-          resource_id: 'bar',
-        }
-      ]
-    end
 
+  let(:res1) do
+    [
+      {
+        resource_id: 'file.foo',
+        type: 'file',
+        parameters: {
+          name: 'foo',
+          alias: 'baz',
+          path: '/foo',
+          content: 'foo content',
+        }
+      }
+    ]
+  end
+
+  let(:res2) do
+    [
+      {
+        resource_id: 'file.foo',
+        type: 'file',
+        parameters: {
+          name: 'foo',
+          alias: 'baz',
+          path: '/food',
+          content: 'foo content 2',
+        }
+      }
+    ]
+  end
+
+  let(:resources1) do
+    [
+      {
+        resource_id: 'foo',
+      },
+      {
+        resource_id: 'bar',
+      }
+    ]
+  end
+
+  let(:resources2) do
+    [
+      {
+        resource_id: 'foo',
+      },
+      {
+        resource_id: 'baz',
+      }
+    ]
+  end
+
+  describe :extract_titles do
     it 'should return resource ids' do
-      extract_titles(resources).should eq(['foo', 'bar'])
+      extract_titles(resources1).should eq(['foo', 'bar'])
     end
   end
 
   describe :compare_resources do
-    let(:res1) do
-      [
-        {
-          resource_id: 'file.foo',
-          type: 'file',
-          parameters: {
-            name: 'foo',
-            alias: 'baz',
-            path: '/foo',
-            content: 'foo content',
-          }
-        }
-      ]
-    end
-
-    let(:res2) do
-      [
-        {
-          resource_id: 'file.foo',
-          type: 'file',
-          parameters: {
-            name: 'foo',
-            alias: 'baz',
-            path: '/food',
-            content: 'foo content 2',
-          }
-        }
-      ]
-    end
 
     it 'should return a diff without options' do
       diffs = compare_resources(res1, res2, {})
@@ -71,5 +84,14 @@ describe Puppet::CatalogDiff::Comparer do
       expect(diffs[:old_params]).to eq({'file.foo' => {content: 'foo content'}})
       expect(diffs[:new_params]).to eq({'file.foo' => {content: 'foo content 2'}})
     end
+  end
+
+  describe :return_resource_diffs do
+    it 'should return differences' do
+      diffs = return_resource_diffs(extract_titles(resources1), extract_titles(resources2))
+      expect(diffs[:titles_only_in_old]).to eq(['bar'])
+      expect(diffs[:titles_only_in_new]).to eq(['baz'])
+    end
+
   end
 end
