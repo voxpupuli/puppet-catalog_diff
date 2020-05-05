@@ -45,7 +45,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
               else
                 args.split(',')
               end
-      unless save_directory =~ /.*\/.*/
+      unless save_directory =~ %r{.*/.*}
         raise "The directory path passed (#{save_directory}) is not an absolute path, mismatched arguments?"
       end
       unless File.directory?(save_directory)
