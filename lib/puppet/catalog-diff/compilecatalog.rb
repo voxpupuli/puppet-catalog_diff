@@ -120,9 +120,8 @@ module Puppet::CatalogDiff
     end
 
     def render_pson(catalog)
-      unless pson = PSON.pretty_generate(catalog, allow_nan: true, max_nesting: false)
-        raise "Could not render catalog as pson, #{catalog}"
-      end
+      pson = PSON.pretty_generate(catalog, allow_nan: true, max_nesting: false)
+      raise "Could not render catalog as pson, #{catalog}" unless pson
       pson
     end
 
