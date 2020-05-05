@@ -58,11 +58,7 @@ module Puppet::CatalogDiff
         m[:version] = tmp.version
         m[:environment] = tmp.environment
 
-        if @version == '0.24'
-          convert24(tmp, v)
-        else
-          convert25(tmp, v)
-        end
+        convert25(tmp, v)
       end
 
       if options[:exclude_classes]
