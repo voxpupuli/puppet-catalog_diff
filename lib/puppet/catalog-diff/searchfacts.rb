@@ -1,7 +1,9 @@
 require 'puppet/network/http_pool'
 require 'uri'
 require 'json'
+# Puppet::CatalogDiff
 module Puppet::CatalogDiff
+  # SearchFacts returns facts from local data, Puppet API, or PuppetDB
   class SearchFacts
     def initialize(facts)
       @facts = Hash[facts.split(',').map { |f| f.split('=') }]

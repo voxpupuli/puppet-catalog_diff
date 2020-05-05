@@ -1,5 +1,9 @@
 require 'puppet/network/http_pool'
+# Puppet::CatalogDiff
 module Puppet::CatalogDiff
+  # Puppet::CatalogDiff::CompileCatalog
+  # allows to retrieve a catalog, using
+  # v3/catalog, v4/catalog or PuppetDB
   class CompileCatalog
     attr_reader :node_name
 

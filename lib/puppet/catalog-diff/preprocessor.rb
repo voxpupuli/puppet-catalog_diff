@@ -1,4 +1,8 @@
+# Puppet::CatalogDiff
 module Puppet::CatalogDiff
+  # Puppet::CatalogDiff::Preprocessor
+  # provides methods to convert catalogs to
+  # the catalog-diff intermediate format
   module Preprocessor
     # capitalize a resource from ["class", "foo::bar"] to Class[Foo::Bar]
     #
