@@ -72,9 +72,9 @@ Puppet::Face.define(:catalog, '0.0.1') do
     when_invoked do |catalog1, catalog2, args, options|
       require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'catalog-diff', 'searchfacts.rb'))
       require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'catalog-diff', 'compilecatalog.rb'))
-      unless nodes = Puppet::CatalogDiff::SearchFacts.new(args).find_nodes(options)
-        raise "Problem finding nodes with query #{args}"
-      end
+      nodes = Puppet::CatalogDiff::SearchFacts.new(args).find_nodes(options)
+      raise "Problem finding nodes with query #{args}" unless nodes
+
       total_nodes = nodes.size
       thread_count = options[:threads].to_i
       compiled_nodes = []
