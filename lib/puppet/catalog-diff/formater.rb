@@ -101,9 +101,9 @@ module Puppet::CatalogDiff
       number = 0
       list = value.map { |hash|
         number += 1
-        hash.map do |key, value|
-          header_spacing = ' ' * (79 - ("#{number}. #{key}".length + ((mark == '%' && '%.2f' % value || value)).to_s.to_s.length))
-          "#{number}. #{key}#{header_spacing}#{(mark == '%' && '%.2f' % value || value)}#{mark}"
+        hash.map do |key, val|
+          header_spacing = ' ' * (79 - ("#{number}. #{key}".length + ((mark == '%' && '%.2f' % val || val)).to_s.to_s.length))
+          "#{number}. #{key}#{header_spacing}#{(mark == '%' && '%.2f' % val || val)}#{mark}"
         end
       }.join("\n")
       "\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n#{list}"
@@ -113,8 +113,8 @@ module Puppet::CatalogDiff
       number = 0
       list = value.map { |hash|
         number += 1
-        hash.map do |key, value|
-          "\033[1m#{number}. #{value}\033[0m\n\t#{key}\n"
+        hash.map do |key, val|
+          "\033[1m#{number}. #{val}\033[0m\n\t#{key}\n"
         end
       }.join("\n")
       "\n#{'-' * 80}\n\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n#{'-' * 80}\n#{list}"
@@ -124,9 +124,9 @@ module Puppet::CatalogDiff
       number = 0
       list = value.map { |hash|
         number += 1
-        hash.map do |key, value|
-          header_spacing = ' ' * (79 - ('    Affected nodes'.length + value.to_s.length))
-          "#{number}. #{key}\n    Affected nodes:#{header_spacing}#{value}"
+        hash.map do |key, val|
+          header_spacing = ' ' * (79 - ('    Affected nodes'.length + val.to_s.length))
+          "#{number}. #{key}\n    Affected nodes:#{header_spacing}#{val}"
         end
       }.join("\n")
       "\n#{'-' * 80}\n\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n#{'-' * 80}\n#{list}"
