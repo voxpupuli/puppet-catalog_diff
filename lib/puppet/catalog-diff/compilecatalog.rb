@@ -42,7 +42,7 @@ module Puppet::CatalogDiff
       use_ssl = port != 8080
       connection = Puppet::Network::HttpPool.http_instance(server_url.host, port, use_ssl)
       query = ['and', ['=', 'certname', node_name.to_s]]
-      server, environment = server.split('/')
+      _server, environment = server.split('/')
       environment ||= lookup_environment(node_name)
       query.concat([['=', 'environment', environment]])
       json_query = URI.escape(query.to_json)
