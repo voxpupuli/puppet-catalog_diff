@@ -48,4 +48,21 @@ module Puppet::CatalogDiff
       end
     end
   end
+
+  # Converts PuppetDB catalogs to our intermediate format
+  def convert_pdb(catalog)
+    catalog = catalog[0]
+    # Fix "data" level in PuppetDB catalog
+    catalog['resources'] = catalog['resources']['data']
+    # Fix edges
+    new_edges = []
+    catalog['edges']['data'].each do |edge|
+      new_edges << {
+        'source' => "#{edge['source_type']}[#{edge['source_title']}]",
+        'target' => "#{edge['target_type']}[#{edge['target_title']}]",
+      }
+    end
+    catalog['edges'] = new_edges
+    catalog
+  end
 end
