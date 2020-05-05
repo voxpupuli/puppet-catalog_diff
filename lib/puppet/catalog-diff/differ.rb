@@ -21,6 +21,15 @@ module Puppet::CatalogDiff
       @to_file = to
     end
 
+    def str_to_catalog(str)
+      if Puppet::Resource::Catalog.respond_to? :from_data_hash
+        Puppet::Resource::Catalog.from_data_hash str
+      else
+        # The method was renamed in 3.5.0
+        Puppet::Resource::Catalog.from_pson str
+      end
+    end
+
     def diff(options = {})
       from = []
       from_meta = {}
@@ -39,21 +48,9 @@ module Puppet::CatalogDiff
           tmp = Marshal.load(File.read(r))
         when '.pson'
           tmp = PSON.parse(File.read(r))
-          unless tmp.respond_to? :version
-            tmp = if Puppet::Resource::Catalog.respond_to? :from_data_hash
-                    Puppet::Resource::Catalog.from_data_hash tmp
-                  else
-                    # The method was renamed in 3.5.0
-                    Puppet::Resource::Catalog.from_pson tmp
-                  end
-          end
+          tmp = str_to_catalog(tmp) unless tmp.respond_to?(:version)
         when '.json'
-          tmp = if Puppet::Resource::Catalog.respond_to? :from_data_hash
-                  Puppet::Resource::Catalog.from_data_hash JSON.parse(File.read(r))
-                else
-                  # The method was renamed in 3.5.0
-                  Puppet::Resource::Catalog.from_pson JSON.parse(File.read(r))
-                end
+          tmp = str_to_catalog(JSON.parse(File.read(r)))
         else
           raise 'Provide catalog with the appropriate file extension, valid extensions are pson, yaml and marshal'
         end
@@ -69,8 +66,8 @@ module Puppet::CatalogDiff
       end
 
       if options[:exclude_classes]
-        [to, from].each do |x|
-          x.reject! { |x| x[:type] == 'Class' }
+        [to, from].each do |c|
+          c.reject! { |x| x[:type] == 'Class' }
         end
       end
 
