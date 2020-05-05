@@ -66,7 +66,7 @@ module Puppet::CatalogDiff
       end
       begin
         filtered = PSON.parse(facts_object)
-      rescue Exception => e
+      rescue PSON::ParserError => e
         raise "Received invalid data from facts endpoint: #{e.message}"
       end
       filtered
@@ -95,8 +95,10 @@ module Puppet::CatalogDiff
         )
       end
       json_query = URI.escape(query.to_json)
-      unless filtered = PSON.parse(connection.request_get("/pdb/query/v4/nodes?query=#{json_query}", 'Accept' => 'application/json').body)
-        raise 'Error parsing json output of puppet search'
+      begin
+        filtered = PSON.parse(connection.request_get("/pdb/query/v4/nodes?query=#{json_query}", 'Accept' => 'application/json').body)
+      rescue PSON::ParserError => e
+        raise "Error parsing json output of puppet search: #{e.message}"
       end
       names = filtered.map { |node| node['certname'] }
       names
