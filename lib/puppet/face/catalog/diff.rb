@@ -201,33 +201,34 @@ Puppet::Face.define(:catalog, '0.0.1') do
 
       format = Puppet::CatalogDiff::Formater.new
       nodes.map { |node, summary|
-        next if node == :total_percentage || node == :total_nodes || node == :most_changed || node == :with_changes || node == :most_differences || node == :pull_output || node == :date
+        next if [:total_percentage, :total_nodes, :most_changed, :with_changes, :most_differences, :pull_output, :date].include?(node)
+
         format.node_summary_header(node, summary, :node_percentage) + summary.map { |header, value|
-                                                                        next if value.nil?
-                                                                        if value.is_a?(Hash)
-                                                                          value.map do |resource_id, resource|
-                                                                            next if resource.nil?
-                                                                            if resource.is_a?(Hash) && resource.key?(:type)
-                                                                              # If we find an actual resource print it out
-                                                                              format.resource_reference(header, resource_id, resource)
-                                                                            elsif resource.is_a?(Array)
-                                                                              next unless resource.any?
-                                                                              # Format string diffs
-                                                                              format.string_diff(header, resource_id, resource)
-                                                                            else
-                                                                              next if resource.nil?
-                                                                              # Format hash diffs
-                                                                              format.params_diff(header, resource_id, resource)
-                                                                            end
-                                                                          end
-                                                                        elsif value.is_a?(Array)
-                                                                          next if value.empty?
-                                                                          # Format arrays
-                                                                          format.list(header, value)
-                                                                        else
-                                                                          format.key_pair(header, value)
-                                                                        end
-                                                                      }.delete_if { |x| x.nil? || x == [] }.join("\n")
+          next if value.nil?
+          if value.is_a?(Hash)
+            value.map do |resource_id, resource|
+              next if resource.nil?
+              if resource.is_a?(Hash) && resource.key?(:type)
+                # If we find an actual resource print it out
+                format.resource_reference(header, resource_id, resource)
+              elsif resource.is_a?(Array)
+                next unless resource.any?
+                # Format string diffs
+                format.string_diff(header, resource_id, resource)
+              else
+                next if resource.nil?
+                # Format hash diffs
+                format.params_diff(header, resource_id, resource)
+              end
+            end
+          elsif value.is_a?(Array)
+            next if value.empty?
+            # Format arrays
+            format.list(header, value)
+          else
+            format.key_pair(header, value)
+          end
+        }.delete_if { |x| x.nil? || x == [] }.join("\n")
       }.join("\n") + "#{format.node_summary_header("#{nodes[:with_changes]} out of #{nodes[:total_nodes]} nodes changed.", nodes, :total_percentage)}\n#{format.list_hash('Nodes with the most changes by percent changed', nodes[:most_changed])}\n\n#{format.list_hash('Nodes with the most changes by differences', nodes[:most_differences], '')}#{(nodes.key?(:pull_output) && format.render_pull(nodes[:pull_output]))}"
     end
   end
