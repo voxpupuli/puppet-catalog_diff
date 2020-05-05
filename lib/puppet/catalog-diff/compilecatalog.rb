@@ -24,9 +24,9 @@ module Puppet::CatalogDiff
     def lookup_environment(node_name)
       # Compile the catalog with the last environment used according to the yaml terminus
       # The following is a hack as I can't pass :mode => master in the 2.7 series
-      unless node = Puppet::Face[:node, '0.0.1'].find(node_name, terminus: 'yaml')
-        raise "Error retrieving node object from yaml terminus #{node_name}"
-      end
+      node = Puppet::Face[:node, '0.0.1'].find(node_name, terminus: 'yaml')
+      raise "Error retrieving node object from yaml terminus #{node_name}" unless node
+
       Puppet.debug("Found environment #{node.environment} for node #{node_name}")
       if node.parameters['clientcert'] != node_name
         raise "The node retrieved from yaml terminus is a mismatch node returned was (#{node.parameters['clientcert']})"

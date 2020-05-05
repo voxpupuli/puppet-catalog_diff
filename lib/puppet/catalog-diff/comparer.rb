@@ -74,9 +74,9 @@ module Puppet::CatalogDiff
         end
 
         if options[:content_diff] &&
-            resource[:parameters][:content] &&
-            new_resource[:parameters][:content] &&
-            resource[:parameters][:content][:checksum] != new_resource[:parameters][:content][:checksum]
+           resource[:parameters][:content] &&
+           new_resource[:parameters][:content] &&
+           resource[:parameters][:content][:checksum] != new_resource[:parameters][:content][:checksum]
           content_differences[resource[:resource_id]] = str_diff(resource[:parameters][:content][:content], new_resource[:parameters][:content][:content])
         end
       end
