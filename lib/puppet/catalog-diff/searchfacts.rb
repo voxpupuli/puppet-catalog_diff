@@ -61,11 +61,11 @@ module Puppet::CatalogDiff
       rescue Exception => e
         raise "Error retrieving facts from #{server}: #{e.message}"
       end
-      if JSON.load(facts_object).key?('issue_kind')
+      if JSON.parse(facts_object).key?('issue_kind')
         raise 'Not authorized to retrieve facts, auth.conf edits missing?' if facts_object['issue_kind'] == 'FAILED_AUTHORIZATION'
       end
       begin
-        filtered = PSON.load(facts_object)
+        filtered = PSON.parse(facts_object)
       rescue Exception => e
         raise "Received invalid data from facts endpoint: #{e.message}"
       end
@@ -95,7 +95,7 @@ module Puppet::CatalogDiff
         )
       end
       json_query = URI.escape(query.to_json)
-      unless filtered = PSON.load(connection.request_get("/pdb/query/v4/nodes?query=#{json_query}", 'Accept' => 'application/json').body)
+      unless filtered = PSON.parse(connection.request_get("/pdb/query/v4/nodes?query=#{json_query}", 'Accept' => 'application/json').body)
         raise 'Error parsing json output of puppet search'
       end
       names = filtered.map { |node| node['certname'] }
