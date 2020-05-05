@@ -22,12 +22,7 @@ module Puppet::CatalogDiff
     end
 
     def str_to_catalog(str)
-      if Puppet::Resource::Catalog.respond_to? :from_data_hash
-        Puppet::Resource::Catalog.from_data_hash str
-      else
-        # The method was renamed in 3.5.0
-        Puppet::Resource::Catalog.from_pson str
-      end
+      Puppet::Resource::Catalog.from_data_hash str
     end
 
     def diff(options = {})
