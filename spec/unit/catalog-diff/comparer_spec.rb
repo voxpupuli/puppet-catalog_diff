@@ -14,6 +14,7 @@ describe Puppet::CatalogDiff::Comparer do
           alias: 'baz',
           path: '/foo',
           content: 'foo content',
+          checksum: '6dbda444875c24ec1bbdb433456be11f',
         }
       }
     ]
@@ -29,6 +30,7 @@ describe Puppet::CatalogDiff::Comparer do
           alias: 'baz',
           path: '/food',
           content: 'foo content 2',
+          checksum: '4eb91aa4f5795ef3658d1e0a2798c816',
         }
       }
     ]
@@ -68,21 +70,21 @@ describe Puppet::CatalogDiff::Comparer do
       diffs = compare_resources(res1, res2, {})
       expect(diffs[:old]).to eq({res1[0][:resource_id] => res1[0]})
       expect(diffs[:new]).to eq({res2[0][:resource_id] => res2[0]})
-      expect(diffs[:old_params]).to eq({'file.foo' => {content: 'foo content', path: '/foo'}})
-      expect(diffs[:new_params]).to eq({'file.foo' => {content: 'foo content 2', path: '/food'}})
+      expect(diffs[:old_params]).to eq({'file.foo' => {content: 'foo content', path: '/foo', checksum: '6dbda444875c24ec1bbdb433456be11f'}})
+      expect(diffs[:new_params]).to eq({'file.foo' => {content: 'foo content 2', path: '/food', checksum: '4eb91aa4f5795ef3658d1e0a2798c816'}})
       expect(diffs[:content_differences]['file.foo']).to match(%r{^\+foo content 2$})
       expect(diffs[:string_diffs]).to be_empty
     end
 
     it 'should return string_diffs with show_resource_diff' do
       diffs = compare_resources(res1, res2, {show_resource_diff: true})
-      expect(diffs[:string_diffs]['file.foo'][2]).to eq("-\t     content => \"foo content\"")
+      expect(diffs[:string_diffs]['file.foo'][3]).to eq("-\t     content => \"foo content\"")
     end
 
     it 'should return a diff without path parameter' do
       diffs = compare_resources(res1, res2, {ignore_parameters: 'path'})
-      expect(diffs[:old_params]).to eq({'file.foo' => {content: 'foo content'}})
-      expect(diffs[:new_params]).to eq({'file.foo' => {content: 'foo content 2'}})
+      expect(diffs[:old_params]).to eq({'file.foo' => {content: 'foo content', checksum: '6dbda444875c24ec1bbdb433456be11f'}})
+      expect(diffs[:new_params]).to eq({'file.foo' => {content: 'foo content 2', checksum: '4eb91aa4f5795ef3658d1e0a2798c816'}})
     end
   end
 
@@ -92,6 +94,31 @@ describe Puppet::CatalogDiff::Comparer do
       expect(diffs[:titles_only_in_old]).to eq(['bar'])
       expect(diffs[:titles_only_in_new]).to eq(['baz'])
     end
+  end
 
+  describe :do_str_diff do
+    it 'should diff two strings' do
+      diff = do_str_diff('abc', 'abd')
+      expect(diff).to match(/^-abc$/)
+      expect(diff).to match(/^\+abd$/)
+    end
+  end
+
+  describe :str_diff do
+    context 'when passing strings' do
+      it 'should diff two strings' do
+        diff = str_diff('abc', 'abd')
+        expect(diff).to match(/^-abc$/)
+        expect(diff).to match(/^\+abd$/)
+      end
+    end
+
+    context 'when passing hashes' do
+      it 'should diff content params' do
+        diff = str_diff(res1[0][:parameters], res2[0][:parameters])
+        expect(diff).to match(/^-foo content$/)
+        expect(diff).to match(/^\+foo content 2$/)
+      end
+    end
   end
 end
