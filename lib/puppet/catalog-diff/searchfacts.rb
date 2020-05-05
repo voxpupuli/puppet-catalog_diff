@@ -102,5 +102,6 @@ module Puppet::CatalogDiff
       end
       names = filtered.map { |node| node['certname'] }
       names
-    end end
+    end
+  end
 end
