@@ -57,10 +57,10 @@ module Puppet::CatalogDiff
       catalog['resources'] = catalog['resources']['data']
       # Fix edges
       new_edges = []
-      catalog['edges']['data'].each do |e|
+      catalog['edges']['data'].each do |edge|
         new_edges << {
-          'source' => "#{e['source_type']}[#{e['source_title']}]",
-          'target' => "#{e['target_type']}[#{e['target_title']}]",
+          'source' => "#{edge['source_type']}[#{edge['source_title']}]",
+          'target' => "#{edge['target_type']}[#{edge['target_title']}]",
         }
       end
       catalog['edges'] = new_edges
