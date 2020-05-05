@@ -52,7 +52,7 @@ module Puppet::CatalogDiff
         when '.json'
           tmp = str_to_catalog(JSON.parse(File.read(r)))
         else
-          raise 'Provide catalog with the appropriate file extension, valid extensions are pson, yaml and marshal'
+          raise 'Provide catalog with the appropriate file extension, valid extensions are json, pson, yaml and marshal'
         end
 
         m[:version] = tmp.version
