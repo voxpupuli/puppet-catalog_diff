@@ -209,8 +209,11 @@ $ ./upload_facts.rb $(puppet config print vardir)/yaml/facts/*.yaml
 ```
 
 The script is available at [https://github.com/JohnEricson/upload_facts](https://github.com/JohnEricson/upload_facts).
-It's been verified to work with uploading facts from Puppet 3 to 5 Masters.
 
+It's been verified to work with uploading facts from Puppet Masters running Puppet
+version 3 to Masters running version 5. It uses the [`/puppet/v3/facts/` API](https://puppet.com/docs/puppet/6.17/http_api/http_facts.html)
+which is available in version 3 and >= 5 of Puppet. This API was removed in Puppet 4 but
+added again in 5.
 
 ## Authors
 R.I.Pienaar <rip@devco.net> / www.devco.net / @ripienaar  
