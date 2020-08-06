@@ -84,6 +84,9 @@ module Puppet::CatalogDiff
             facts: false,
             catalog: false,
           },
+          options: {
+            prefer_requested_environment: true,
+          },
         }
       else
         endpoint = "/puppet/v3/catalog/#{node_name}?environment=#{environment}"
