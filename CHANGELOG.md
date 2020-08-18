@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [v2.2.1](https://github.com/camptocamp/puppet-catalog-diff/tree/v2.2.1) (2020-08-18)
+## [v2.3.0](https://github.com/camptocamp/puppet-catalog-diff/tree/v2.3.0) (2020-08-18)
 
-[Full Changelog](https://github.com/camptocamp/puppet-catalog-diff/compare/v2.2.1...v2.2.1)
+[Full Changelog](https://github.com/camptocamp/puppet-catalog-diff/compare/v2.2.1...v2.3.0)
 
 ### Added
 
@@ -16,10 +16,6 @@ All notable changes to this project will be documented in this file. The format 
 ## [v2.2.1](https://github.com/camptocamp/puppet-catalog-diff/tree/v2.2.1) (2020-07-15)
 
 [Full Changelog](https://github.com/camptocamp/puppet-catalog-diff/compare/v2.2.0...v2.2.1)
-
-### Added
-
-- Use \#notice instead of \#err for realtime message [\#26](https://github.com/camptocamp/puppet-catalog-diff/pull/26) ([raphink](https://github.com/raphink))
 
 ### Fixed
 
@@ -44,6 +40,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Added
 
+- Use \#notice instead of \#err for realtime message [\#26](https://github.com/camptocamp/puppet-catalog-diff/pull/26) ([raphink](https://github.com/raphink))
 - Add --exclude\_defined\_resources [\#25](https://github.com/camptocamp/puppet-catalog-diff/pull/25) ([raphink](https://github.com/raphink))
 
 ## [v2.0.0](https://github.com/camptocamp/puppet-catalog-diff/tree/v2.0.0) (2020-05-05)
@@ -64,6 +61,29 @@ All notable changes to this project will be documented in this file. The format 
 ### Fixed
 
 - Fix convert\_pdb [\#21](https://github.com/camptocamp/puppet-catalog-diff/pull/21) ([raphink](https://github.com/raphink))
+
+## [v1.7.0](https://github.com/camptocamp/puppet-catalog-diff/tree/v1.7.0) (2020-05-05)
+
+[Full Changelog](https://github.com/camptocamp/puppet-catalog-diff/compare/v1.6.0...v1.7.0)
+
+### Added
+
+- Refactor [\#14](https://github.com/camptocamp/puppet-catalog-diff/pull/14) ([raphink](https://github.com/raphink))
+- Lint [\#13](https://github.com/camptocamp/puppet-catalog-diff/pull/13) ([raphink](https://github.com/raphink))
+- Ignore parameters [\#12](https://github.com/camptocamp/puppet-catalog-diff/pull/12) ([raphink](https://github.com/raphink))
+- Sort hash keys in formater [\#11](https://github.com/camptocamp/puppet-catalog-diff/pull/11) ([raphink](https://github.com/raphink))
+- Include environment in report [\#10](https://github.com/camptocamp/puppet-catalog-diff/pull/10) ([raphink](https://github.com/raphink))
+- Update to current PDK template [\#9](https://github.com/camptocamp/puppet-catalog-diff/pull/9) ([DavidS](https://github.com/DavidS))
+- Cache str diffs [\#8](https://github.com/camptocamp/puppet-catalog-diff/pull/8) ([raphink](https://github.com/raphink))
+- Puppetdb catalog [\#7](https://github.com/camptocamp/puppet-catalog-diff/pull/7) ([raphink](https://github.com/raphink))
+- Output endpoint in debug [\#6](https://github.com/camptocamp/puppet-catalog-diff/pull/6) ([raphink](https://github.com/raphink))
+- Support certless API [\#3](https://github.com/camptocamp/puppet-catalog-diff/pull/3) ([raphink](https://github.com/raphink))
+- Use v3 catalog API [\#2](https://github.com/camptocamp/puppet-catalog-diff/pull/2) ([raphink](https://github.com/raphink))
+
+### Fixed
+
+- Fix: v4/catalog returns an embedded catalog [\#5](https://github.com/camptocamp/puppet-catalog-diff/pull/5) ([raphink](https://github.com/raphink))
+- Check key in parsed catalog [\#1](https://github.com/camptocamp/puppet-catalog-diff/pull/1) ([raphink](https://github.com/raphink))
 
 ## [v1.6.0](https://github.com/camptocamp/puppet-catalog-diff/tree/v1.6.0) (2015-06-04)
 [Full Changelog](https://github.com/camptocamp/puppet-catalog-diff/compare/v1.5.2...v1.6.0)
