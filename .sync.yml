@@ -24,3 +24,6 @@ Gemfile:
 spec/spec_helper.rb:
   mock_with: ":rspec"
   coverage_report: true
+
+Rakefile:
+  changelog_since_tag: v1.6.0
