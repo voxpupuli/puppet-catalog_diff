@@ -53,7 +53,7 @@ module Puppet::CatalogDiff
 
         if options[:show_resource_diff]
           Puppet.debug("Resource diff: #{resource[:resource_id]}")
-
+          puts 'show_resource_diff'
           diff_array = str_diff(
             Puppet::CatalogDiff::Formater.new.resource_to_string(resource),
             Puppet::CatalogDiff::Formater.new.resource_to_string(new_resource),
@@ -138,13 +138,20 @@ module Puppet::CatalogDiff
         sum2 = Digest::MD5.hexdigest(str2)
       end
 
+      puts "str_diff: str1: #{str1} str1.encoding: #{str1.encoding}"
+      puts "str_diff: str2: #{str2} str2.encoding: #{str2.encoding}"
       unless str1.valid_encoding?
         Puppet::debug("content parameter in old resource has invalid #{str1.encoding} encoding.")
         str1.encode!('UTF-8', 'UTF-8', :invalid => :replace)
+        puts "str_diff: str1 fixed str1: #{str1} str1.encoding: #{str1.encoding}"
+        unless str1.valid_encoding?
+          puts "str1 STILL WRONG!"
+        end
       end
       unless str2.valid_encoding?
         Puppet::debug("content parameter in new resource has invalid #{str2.encoding} encoding.")
         str2.encode!('UTF-8', 'UTF-8', :invalid => :replace)
+        puts "str2 fixed str2: #{str2} str2.encoding: #{str2.encoding}"
       end
 
       return nil unless str1 && str2

@@ -79,6 +79,28 @@ describe Puppet::CatalogDiff::Comparer do
       diffs = compare_resources(res1, res2, show_resource_diff: true)
       expect(diffs[:string_diffs]['file.foo'][3]).to eq("-\t     content => \"foo content\"")
     end
+      
+    it 'returns string_diffs with show_resource_diff with content encoded in ISO8859-1 (latin1)' do
+      # Without this the unit test fails when running on LC_ALL=C but works with LC_ALL=en_US.UTF-8
+      # With this it works on both.
+      Encoding.default_internal = 'UTF-8'
+      Encoding.default_external = 'UTF-8' # Needed because diff uses tempfile.
+      
+      puts "Encoding.default_internal: #{Encoding.default_internal}"
+      latin1_string = [246].pack('C*').force_encoding('UTF-8')
+      res1[0][:parameters][:content] = latin1_string 
+      puts "latin1_string.encoding: #{latin1_string.encoding}"
+      #puts "latin1_string: #{latin1_string}"
+      #puts "latin1_string.bytes: #{latin1_string.bytes}"
+      expect{compare_resources(res1, res2, show_resource_diff: true)}.not_to raise_error(ArgumentError)
+      diffs = compare_resources(res1, res2, show_resource_diff: true)
+      #puts "diffs: #{diffs}"
+      puts "diffs: #{diffs[:string_diffs]['file.foo'][3].bytes}"
+      ruby_default_replacement_string_for_invalid_characters = '�'
+       
+      expect(diffs[:string_diffs]['file.foo'][3]).to \
+        eq("-\t     content => \"" + ruby_default_replacement_string_for_invalid_characters + "\"")
+    end
 
     it 'returns a diff without path parameter' do
       diffs = compare_resources(res1, res2, ignore_parameters: 'path')
