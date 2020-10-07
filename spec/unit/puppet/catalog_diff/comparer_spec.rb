@@ -86,18 +86,12 @@ describe Puppet::CatalogDiff::Comparer do
       Encoding.default_internal = 'UTF-8'
       Encoding.default_external = 'UTF-8' # Needed because diff uses tempfile.
       
-      puts "Encoding.default_internal: #{Encoding.default_internal}"
       latin1_string = [246].pack('C*').force_encoding('UTF-8')
       res1[0][:parameters][:content] = latin1_string 
-      puts "latin1_string.encoding: #{latin1_string.encoding}"
-      #puts "latin1_string: #{latin1_string}"
-      #puts "latin1_string.bytes: #{latin1_string.bytes}"
       expect{compare_resources(res1, res2, show_resource_diff: true)}.not_to raise_error(ArgumentError)
       diffs = compare_resources(res1, res2, show_resource_diff: true)
-      #puts "diffs: #{diffs}"
-      puts "diffs: #{diffs[:string_diffs]['file.foo'][3].bytes}"
+      
       ruby_default_replacement_string_for_invalid_characters = '�'
-       
       expect(diffs[:string_diffs]['file.foo'][3]).to \
         eq("-\t     content => \"" + ruby_default_replacement_string_for_invalid_characters + "\"")
     end
