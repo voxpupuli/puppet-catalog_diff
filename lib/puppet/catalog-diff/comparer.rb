@@ -119,6 +119,14 @@ module Puppet::CatalogDiff
       diff
     end
 
+    def validate_encoding(str)
+      unless str.valid_encoding?
+        Puppet::debug("Detected that string used in diff had invalid #{str.encoding} encoding. Replacing invalid characters in diff output.")
+        str.encode!('UTF-8', 'UTF-8', :invalid => :replace)
+      end
+      str
+    end 
+    
     def str_diff(cont1, cont2)
       return nil unless cont1 && cont2
 
@@ -137,6 +145,9 @@ module Puppet::CatalogDiff
         str2 = cont2
         sum2 = Digest::MD5.hexdigest(str2)
       end
+
+      str1 = validate_encoding(str1)
+      str2 = validate_encoding(str2)
 
       return nil unless str1 && str2
       return nil if sum1 == sum2
