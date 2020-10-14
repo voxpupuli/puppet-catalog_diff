@@ -19,7 +19,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
       default_to { Facter.value('fqdn') }
     end
 
-    option '--threads' do
+    option '--threads=' do
       summary 'The number of threads to use'
       default_to { '10' }
     end
