@@ -23,11 +23,7 @@ module Puppet::CatalogDiff
 
     def build_query(env, version)
       base_query = ['and', ['=', ['node', 'active'], true]]
-      if version == 'latest'
-        query_field_catalog_environment = 'catalog_environment'
-      else
-        query_field_catalog_environment = 'catalog-environment'
-      end
+      query_field_catalog_environment = Puppet::Util::Package.versioncmp(version, '3') > 0 ? 'catalog_environment' : 'catalog-environment'
       base_query.concat([['=', query_field_catalog_environment, env]]) if env
       real_facts = @facts.reject { |_k, v| v.nil? }
       query = base_query.concat(real_facts.map { |k, v| ['=', ['fact', k], v] })
@@ -46,13 +42,26 @@ module Puppet::CatalogDiff
       query
     end
 
+    def get_puppetdb_version(connection)
+      result = connection.request_get('/pdb/meta/v1/version', 'Accept' => 'application/json')
+      if result.code.to_i == 200
+        body = JSON.parse(result.body)
+        version = body['version']
+        Puppet.debug("Got PuppetDB version: #{version} from HTTP API.")
+      else
+        version = '2.3'
+        Puppet::debug("Getting PuppetDB version failed because HTTP API query returned code #{result.code}. Falling back to PuppetDB version #{version}.")
+      end
+      version
+    end
+
     def find_nodes_puppetdb(env)
       require 'puppet/util/puppetdb'
-      puppetdb_version = 'latest'
       server_url = Puppet::Util::Puppetdb.config.server_urls[0]
       port = server_url.port
       use_ssl = port != 8080
       connection = Puppet::Network::HttpPool.http_instance(server_url.host, port, use_ssl)
+      puppetdb_version = get_puppetdb_version(connection)
       query = build_query(env, puppetdb_version)
       json_query = URI.escape(query.to_json)
       begin
