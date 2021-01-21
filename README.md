@@ -169,10 +169,13 @@ system, allowing use of all CPUs.
 
 ### Fact search
 
-You can pass `--fact_search` to filter the list of nodes based on a single fact value.
-This currently defaults to `kernel=Linux` if you do not pass it.
-This query will be passed as a filter to the PuppetDB to retrieve the list of
-nodes to compare.
+You can pass `--fact_search` to filter the list of nodes based on a single fact
+value. This currently defaults to `kernel=Linux` if you do not pass it. This
+query will be passed as a filter to the PuppetDB to retrieve the list of nodes
+to compare. The fact's name can be prefixed with `not ` to negate the
+filtering. Also, this filtering only works at the moment with numeric values
+due to PuppetDB limitations. For example, you could compare all nodes which do
+not have `synthetic` set to `1` by using: `not synthetic=1`.
 
 ### Changed depth
 

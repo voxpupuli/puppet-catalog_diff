@@ -26,18 +26,34 @@ module Puppet::CatalogDiff
       query_field_catalog_environment = Puppet::Util::Package.versioncmp(version, '3') >= 0 ? 'catalog_environment' : 'catalog-environment'
       base_query.concat([['=', query_field_catalog_environment, env]]) if env
       real_facts = @facts.reject { |_k, v| v.nil? }
-      query = base_query.concat(real_facts.map { |k, v| ['=', ['fact', k], v] })
+      query = base_query.concat(real_facts.map { |k, v|
+        # From PuppetDB documentation: "Inequality operators are allowed, and will skip non-numeric values.".
+        k.start_with?('not ') ? ['not', ['=', ['fact', k[4..-1]], Integer(v)]] : ['=', ['fact', k], v]
+      })
       classes = Hash[@facts.select { |_k, v| v.nil? }].keys
       classes.each do |c|
+        negated = c.start_with?('not ')
+        c = negated ? c[4..-1] : c
         capit = c.split('::').map { |n| n.capitalize }.join('::')
-        query = query.concat(
-          [['in', 'certname',
-            ['extract', 'certname',
-             ['select-resources',
-              ['and',
-               ['=', 'type', 'Class'],
-               ['=', 'title', capit]]]]]],
-        )
+        if negated then
+          query = query.concat(
+            [['in', 'certname',
+              ['extract', 'certname',
+               ['select-resources',
+                ['and',
+                 ['=', 'type', 'Class'],
+                 ['not' ['=', 'title', capit]]]]]]],
+          )
+        else
+          query = query.concat(
+            [['in', 'certname',
+              ['extract', 'certname',
+               ['select-resources',
+                ['and',
+                 ['=', 'type', 'Class'],
+                 ['=', 'title', capit]]]]]],
+          )
+        end
       end
       query
     end
