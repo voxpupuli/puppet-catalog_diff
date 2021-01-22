@@ -24,6 +24,7 @@ module Puppet::CatalogDiff
     def build_query(env, version)
       base_query = ['and', ['=', ['node', 'active'], true]]
       query_field_catalog_environment = Puppet::Util::Package.versioncmp(version, '3') >= 0 ? 'catalog_environment' : 'catalog-environment'
+      query_field_select_resources = Puppet::Util::Package.versioncmp(version, '3') >= 0 ? 'select_resources' : 'select-resources'
       base_query.concat([['=', query_field_catalog_environment, env]]) if env
       real_facts = @facts.reject { |_k, v| v.nil? }
       query = base_query.concat(real_facts.map { |k, v| ['=', ['fact', k], v] })
@@ -33,7 +34,7 @@ module Puppet::CatalogDiff
         query = query.concat(
           [['in', 'certname',
             ['extract', 'certname',
-             ['select-resources',
+             [query_field_select_resources,
               ['and',
                ['=', 'type', 'Class'],
                ['=', 'title', capit]]]]]],
