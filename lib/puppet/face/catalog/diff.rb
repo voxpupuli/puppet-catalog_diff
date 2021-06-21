@@ -241,7 +241,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
             format.key_pair(header, value)
           end
         }.delete_if { |x| x.nil? || x == [] }.join("\n")
-      }.join("\n") + "#{format.node_summary_header("#{nodes[:with_changes]} out of #{nodes[:total_nodes]} nodes changed.", nodes, :total_percentage)}\n#{format.list_hash('Nodes with the most changes by percent changed', nodes[:most_changed])}\n\n#{format.list_hash('Nodes with the most changes by differences', nodes[:most_differences], '')}#{(nodes.key?(:pull_output) && format.render_pull(nodes[:pull_output]))}"
+      }.join("\n") + "#{format.node_summary_header("#{nodes[:with_changes]} out of #{nodes[:total_nodes]} nodes changed.", nodes, :total_percentage)}\n#{format.list_hash('Nodes with the most changes by percent changed', nodes[:most_changed])}\n\n#{format.list_hash('Nodes with the most changes by differences', nodes[:most_differences], '')}#{format.render_pull(nodes[:pull_output]) if nodes.key?(:pull_output)}"
     end
   end
 end
