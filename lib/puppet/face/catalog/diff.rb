@@ -178,16 +178,16 @@ Puppet::Face.define(:catalog, '0.0.1') do
         FileUtils.rm_rf(old_catalogs)
         FileUtils.rm_rf(new_catalogs)
         nodes[:pull_output] = pull_output
-        # Save the file as it can take a while to create
-        if options[:output_report]
-          Puppet.notice("Writing report to disk: #{options[:output_report]}")
-          File.open(options[:output_report], 'w') do |f|
-            f.write(nodes.to_json)
-          end
-        end
         return nodes
       end
       raise 'No nodes were matched' if nodes.size.zero?
+
+      if options[:output_report]
+        Puppet.notice("Writing report to disk: #{options[:output_report]}")
+        File.open(options[:output_report], 'w') do |f|
+          f.write(nodes.to_json)
+        end
+      end
 
       with_changes = nodes.select { |_node, summary| summary.is_a?(Hash) && !summary[:node_percentage].zero? }
       most_changed = with_changes.sort_by { |_node, summary| summary[:node_percentage] }.map do |node, summary|
