@@ -88,7 +88,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
         key.each do |node|
           "Compiled Node: #{node}"
         end
-      }.join("\n") + "#{output[:failed_nodes].join("\n")}\nFailed on #{output[:failed_nodes].size} nodes"
+      }.join("\n") + "#{output[:failed_nodes].to_a.join("\n")}\nFailed on #{output[:failed_nodes].size} nodes"
     end
   end
 end
