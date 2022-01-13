@@ -9,7 +9,7 @@ module Puppet::CatalogDiff
     def format_simple(v, indent = '', do_indent = false, comma = '')
       str = ''
       str << indent if do_indent
-      v = "\"#{v}\"" unless [Integer, TrueClass, FalseClass].include?(v.class)
+      v = "\"#{v}\"" unless [Integer, Float, TrueClass, FalseClass].include?(v.class)
       str << v.to_s << comma << "\n"
     end
 
