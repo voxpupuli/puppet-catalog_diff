@@ -150,7 +150,8 @@ $ puppet catalog diff \
      --output_report "${HOME}/lastrun-$$.json" \
      --debug \
      \ #--fact_search kernel='Darwin' \
-     --threads 50
+     --threads 50 \
+     \ #--node_list=node1.example.come,node2.example.com
 ```
 
 
@@ -173,6 +174,12 @@ You can pass `--fact_search` to filter the list of nodes based on a single fact 
 This currently defaults to `kernel=Linux` if you do not pass it.
 This query will be passed as a filter to the PuppetDB to retrieve the list of
 nodes to compare.
+
+### Node list
+
+Passing `--node_list` will bypass the dynamic generation of node lists from PuppetDB
+including the `--fact_search` filter. The list of nodes are not validated against
+PuppetDB, and it is up to the user to ensure that the nodes exist and are active.
 
 ### Changed depth
 
