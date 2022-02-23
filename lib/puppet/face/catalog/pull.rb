@@ -46,6 +46,10 @@ Puppet::Face.define(:catalog, '0.0.1') do
       summary 'Use the certless catalog API (Puppet >= 6.3.0)'
     end
 
+    option '--node_list=' do
+      summary 'A manual list of nodes to run catalog diffs against'
+    end
+
     description <<-'EOT'
       This action is used to seed a series of catalogs from two servers
     EOT
@@ -64,7 +68,11 @@ Puppet::Face.define(:catalog, '0.0.1') do
     when_invoked do |catalog1, catalog2, args, options|
       require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'catalog-diff', 'searchfacts.rb'))
       require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'catalog-diff', 'compilecatalog.rb'))
-      nodes = Puppet::CatalogDiff::SearchFacts.new(args).find_nodes(options)
+      nodes = if options[:node_list].nil?
+        Puppet::CatalogDiff::SearchFacts.new(args).find_nodes(options)
+      else
+        options[:node_list].split(',')
+      end
       raise "Problem finding nodes with query #{args}" unless nodes
 
       total_nodes = nodes.size
