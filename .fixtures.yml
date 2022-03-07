@@ -3,4 +3,9 @@
 ---
 fixtures:
   forge_modules:
-#     stdlib: "puppetlabs/stdlib"
+    stdlib: "puppetlabs/stdlib"
+    apache: "puppetlabs/apache"
+    htpasswd: "citrin/htpasswd"
+    vcsrepo: "puppetlabs/vcsrepo"
+    git: "puppetlabs/git"
+    concat: "puppetlabs/concat"

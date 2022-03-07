@@ -23,6 +23,10 @@
     {
       "name": "puppetlabs/git",
       "version_requirement": ">=0.5.0 < 1.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">=7.0.0 < 8.0.0"
     }
   ],
   "operatingsystem_support": [
