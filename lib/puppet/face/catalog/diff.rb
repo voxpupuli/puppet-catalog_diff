@@ -203,7 +203,6 @@ Puppet::Face.define(:catalog, '0.0.1') do
       nodes[:total_nodes]        = total_nodes
       nodes[:date]               = Time.new.iso8601
       nodes[:all_changed_nodes]  = with_changes.keys
-      nodes
 
       if options[:output_report]
         Puppet.notice("Writing report to disk: #{options[:output_report]}")
@@ -211,6 +210,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
           f.write(nodes.to_json)
         end
       end
+      nodes
     end
 
     when_rendering :console do |nodes|
