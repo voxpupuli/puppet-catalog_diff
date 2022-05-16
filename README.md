@@ -45,7 +45,12 @@ This will let you gauge the impact of a change before actually touching
 any of your nodes.
 
 This tool is delivered as a collection of Puppet Faces.
-It thus requires a Puppet installation to properly run.
+It thus requires a Puppet 6.11 (or newer) installation to properly run.
+
+Only the system that runs the catalog-diff needs to be Puppet 6.11 or newer.
+You can run it on a Puppetserver that also provides you the old or new
+catalogs. However, you can also get catalogs from remote
+Puppetservers/PuppetDBs. PuppetDB 2.3 and newer are supported.
 
 The diff tool recognizes catalogs in yaml, marshall, json, or pson formats.
 Currently automatic generation of the catalogs is done in the pson format.
@@ -59,7 +64,7 @@ should contain only machines that have not been decommissioned in PuppetDB (impo
 as compiling their catalogs would also reactive them and their exports otherwise).
 
 When you are comparing between different versions of Puppet using two Master servers
-you are going to need to copy facts from the old Master to the new one in order to be 
+you are going to need to copy facts from the old Master to the new one in order to be
 able to compile catalogs on the new Master. This is useful when upgrading Puppet version.
 
 To upload facts to PuppetDB on a Master see the [Upload facts](#upload-facts-to-puppetdb) script.

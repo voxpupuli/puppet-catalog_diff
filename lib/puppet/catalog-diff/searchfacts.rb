@@ -42,9 +42,10 @@ module Puppet::CatalogDiff
       query
     end
 
-    def get_puppetdb_version(connection)
-      result = connection.request_get('/pdb/meta/v1/version', 'Accept' => 'application/json')
-      if result.code.to_i == 200
+    def get_puppetdb_version(server)
+      headers = { 'Accept' => 'application/json'}
+      result = Puppet.runtime[:http].get(URI("#{server}/pdb/meta/v1/version"), headers: headers)
+      if result.code == 200
         body = JSON.parse(result.body)
         version = body['version']
         Puppet.debug("Got PuppetDB version: #{version} from HTTP API.")
@@ -58,20 +59,19 @@ module Puppet::CatalogDiff
     def find_nodes_puppetdb(env)
       require 'puppet/util/puppetdb'
       server_url = Puppet::Util::Puppetdb.config.server_urls[0]
-      port = server_url.port
-      use_ssl = port != 8080
-      connection = Puppet::Network::HttpPool.http_instance(server_url.host, port, use_ssl)
-      puppetdb_version = get_puppetdb_version(connection)
+      puppetdb_version = get_puppetdb_version(server_url)
       query = build_query(env, puppetdb_version)
       json_query = URI.escape(query.to_json)
+      headers = { 'Accept' => 'application/json'}
+      Puppet.debug("Querying #{server_url} for environment #{env}")
       begin
-        result = connection.request_get("/pdb/query/v4/nodes?query=#{json_query}", 'Accept' => 'application/json')
-        if result.code.to_i >= 400
+        result = Puppet.runtime[:http].get(URI("#{server_url}/pdb/query/v4/nodes?query=#{json_query}"), headers: headers)
+        if result.code >= 400
           puppetdb_version = '2.3'
           Puppet::debug("Query returned HTTP code #{result.code}. Falling back to older version of API used in PuppetDB version #{puppetdb_version}.")
           query = build_query(env, puppetdb_version)
           json_query = URI.escape(query.to_json)
-          result = connection.request_get("/v4/nodes/?query=#{json_query}", 'Accept' => 'application/json')
+          result = Puppet.runtime[:http].get(URI("#{server_url}/pdb/query/v4/nodes?query=#{json_query}"), headers: headers)
         end
         filtered = PSON.parse(result.body)
       rescue PSON::ParserError => e
