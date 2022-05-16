@@ -49,19 +49,21 @@ module Puppet::CatalogDiff
       Puppet.debug("Getting PuppetDB catalog for #{node_name}")
       require 'puppet/util/puppetdb'
       server_url = Puppet::Util::Puppetdb.config.server_urls[0]
-      port = server_url.port
-      use_ssl = port != 8080
-      connection = Puppet::Network::HttpPool.http_instance(server_url.host, port, use_ssl)
       query = ['and', ['=', 'certname', node_name.to_s]]
       _server, environment = server.split('/')
       environment ||= lookup_environment(node_name)
       query.concat([['=', 'environment', environment]])
       json_query = URI.encode_www_form_component(query.to_json)
-      ret = connection.request_get("/pdb/query/v4/catalogs?query=#{json_query}", 'Accept' => 'application/json').body
+      request_url = URI("#{server_url}/pdb/query/v4/catalogs?query=#{json_query}")
+      headers = { 'Accept-Content' => 'application/json'}
+      ret = Puppet.runtime[:http].get(request_url, headers: headers)
+      unless ret.success?
+        raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}"
+      end
       begin
-        catalog = PSON.parse(ret)
+        catalog = PSON.parse(ret.body)
       rescue PSON::ParserError => e
-        raise "Error parsing json output of puppetdb catalog query for #{node_name}: #{e.message}\ncontent: #{ret}"
+        raise "Error parsing json output of puppetdb catalog query for #{node_name}: #{e.message}\ncontent: #{ret.body}"
       end
 
       convert_pdb(catalog)
@@ -95,23 +97,25 @@ module Puppet::CatalogDiff
         endpoint = "/puppet/v3/catalog/#{node_name}?environment=#{environment}"
       end
 
-      Puppet.debug("Connecting to server: #{server}#{endpoint}")
+      uri = URI("https://#{server}:#{port}#{endpoint}")
+      Puppet.debug("Connecting to server: #{uri}")
       begin
-        connection = Puppet::Network::HttpPool.http_instance(server, port)
-
         ret = if certless
-                connection.request_post(endpoint, body.to_json, headers).body
+                Puppet.runtime[:http].post(uri, body.to_json, headers: headers)
               else
-                connection.request_get(endpoint, headers).body
+                Puppet.runtime[:http].get(uri, headers: headers)
               end
+      unless ret.success?
+        raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}"
+      end
       rescue Exception => e
         raise "Failed to retrieve catalog for #{node_name} from #{server} in environment #{environment}: #{e.message}"
       end
 
       begin
-        catalog = PSON.parse(ret)
+        catalog = PSON.parse(ret.body)
       rescue PSON::ParserError => e
-        raise "Error parsing json output of puppet catalog query for #{node_name}: #{e.message}. Content: #{ret}"
+        raise "Error parsing json output of puppet catalog query for #{node_name}: #{e.message}. Content: #{ret.body}"
       end
       if catalog.key?('issue_kind')
         raise catalog['message']
