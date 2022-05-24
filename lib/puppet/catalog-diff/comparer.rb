@@ -125,8 +125,8 @@ module Puppet::CatalogDiff
         str.encode!('UTF-8', 'UTF-8', :invalid => :replace)
       end
       str
-    end 
-    
+    end
+
     def str_diff(cont1, cont2)
       return nil unless cont1 && cont2
 
