@@ -11,10 +11,10 @@ module Puppet::CatalogDiff
 
     attr_reader :node_name
 
-    def initialize(node_name, save_directory, server, certless, catalog_from_puppetdb)
+    def initialize(node_name, save_directory, server, certless, catalog_from_puppetdb, puppetdb)
       @node_name = node_name
       catalog = if catalog_from_puppetdb
-                  get_catalog_from_puppetdb(node_name, server)
+                  get_catalog_from_puppetdb(node_name, server, puppetdb)
                 else
                   catalog = compile_catalog(node_name, server, certless)
                   clean_sensitive_parameters!(catalog)
@@ -45,16 +45,14 @@ module Puppet::CatalogDiff
       node.environment
     end
 
-    def get_catalog_from_puppetdb(node_name, server)
-      Puppet.debug("Getting PuppetDB catalog for #{node_name}")
-      require 'puppet/util/puppetdb'
-      server_url = Puppet::Util::Puppetdb.config.server_urls[0]
+    def get_catalog_from_puppetdb(node_name, server, puppetdb)
+      Puppet.debug("Getting PuppetDB catalog for #{node_name} from #{puppetdb}")
       query = ['and', ['=', 'certname', node_name.to_s]]
       _server, environment = server.split('/')
       environment ||= lookup_environment(node_name)
       query.concat([['=', 'environment', environment]])
       json_query = URI.encode_www_form_component(query.to_json)
-      request_url = URI("#{server_url}/pdb/query/v4/catalogs?query=#{json_query}")
+      request_url = URI("#{puppetdb}/pdb/query/v4/catalogs?query=#{json_query}")
       headers = { 'Accept-Content' => 'application/json'}
       ret = Puppet.runtime[:http].get(request_url, headers: headers)
       unless ret.success?

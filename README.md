@@ -216,6 +216,39 @@ converting this report to (GitHub flavored) markdown. The script above also will
 save the output with escaped color. If you want to view that text report run
 `less -r lastrun-$$.log`
 
+### Non-default PuppetDB/Configuring PuppetDB
+
+Usually, Puppet uses its default PuppetDB. This is configured in the
+`puppetdb.conf`. The file is located at
+`$(puppet config print confdir)/puppetdb.conf` (usually
+`/etc/puppetlabs/puppet/puppetdb.conf`). It's present by default on all
+Puppetservers that talk to a PuppetDB. puppet-catalog-diff will use the first
+entry in that file.
+
+It's recommended to run puppet-catalog-diff as a normal user, not as root user.
+In that case the `confdir` is different and you need to create the
+`puppetdb.conf` explicitly. It's a
+[simple ini format](https://puppet.com/docs/puppetdb/latest/puppetdb_connection.html):
+
+```ini
+[main]
+server_urls = https://fqdn:8081
+```
+
+You can even run puppet-catalog-diff as non-root on a system that's not a
+Puppetserver. In that case you need to install
+[puppetdb-termini](https://puppet.com/docs/puppetdb/latest/connect_puppet_server.html#on-platforms-with-packages)
+in addition to the Puppet Agent.
+
+The spec allows you to list multiple PuppetDBs in the `puppetdb.conf`, however
+puppet-catalog-diff always uses the first entry. By default, this server will
+be used to discover nodes in PuppetDB, to get old catalogs from PuppetDB and to
+get new catalogs.
+
+If you like, you can provide two explicit PuppetDB URIs for different purposes.
+For node discovery and retrieving old catalogs, you can use
+`--old_puppetdb https://fqdn:8081`. To get new catalogs from a specific
+Puppetdb, use `--new_puppetdb https://fqdn:8081`.
 
 ## Limitations
 

@@ -1,6 +1,7 @@
 require 'puppet/face'
 require 'thread'
 require 'json'
+require 'puppet/util/puppetdb'
 
 begin
   require 'parallel'
@@ -13,6 +14,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
   action :diff do
     summary 'Compare catalogs from different puppet versions.'
     arguments '<catalog1> <catalog2>'
+    puppetdb_url = Puppet::Util::Puppetdb.config.server_urls[0]
 
     option '--fact_search=' do
       summary 'Fact search used to filter which catalogs are compiled and compared'
@@ -54,11 +56,11 @@ Puppet::Face.define(:catalog, '0.0.1') do
     end
 
     option '--old_catalog_from_puppetdb' do
-      summary 'Get old catalog from PuppetDB inside of compile master'
+      summary "Get old catalog from PuppetDB inside of compile master. Defaults to #{puppetdb_url}. Overwrite with --old_puppetdb"
     end
 
     option '--new_catalog_from_puppetdb' do
-      summary 'Get new catalog from PuppetDB inside of compile master'
+      summary "Get new catalog from PuppetDB inside of compile master. Defaults to #{puppetdb_url}. Overwrite with --new_puppetdb"
     end
 
     option '--changed_depth=' do
@@ -77,6 +79,16 @@ Puppet::Face.define(:catalog, '0.0.1') do
 
     option '--node_list=' do
       summary 'A manual list of nodes to run catalog diffs against'
+    end
+
+    option '--old_puppetdb=' do
+      summary 'URI to PuppetDB to find nodes if --node_list is not set. Also used to download old catalogs. Defaults to first server in puppetdb.conf'
+      default_to { puppetdb_url }
+    end
+
+    option '--new_puppetdb=' do
+      summary 'Used to download new catalogs. Defaults to first server in puppetdb.conf'
+      default_to { puppetdb_url }
     end
 
     description <<-'EOT'
@@ -176,6 +188,8 @@ Puppet::Face.define(:catalog, '0.0.1') do
           certless: options[:certless],
           old_catalog_from_puppetdb: options[:old_catalog_from_puppetdb],
           new_catalog_from_puppetdb: options[:new_catalog_from_puppetdb],
+          old_puppetdb: options[:old_puppetdb],
+          new_puppetdb: options[:new_puppetdb],
           node_list: options[:node_list]
         )
         diff_output = Puppet::Face[:catalog, '0.0.1'].diff(old_catalogs, new_catalogs, options)
