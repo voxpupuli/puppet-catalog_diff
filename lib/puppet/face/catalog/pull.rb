@@ -1,7 +1,6 @@
 require 'puppet/face'
 require 'thread'
 require 'digest'
-# require 'puppet/application/master'
 
 Puppet::Face.define(:catalog, '0.0.1') do
   action :pull do
