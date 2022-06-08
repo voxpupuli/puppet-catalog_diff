@@ -125,6 +125,19 @@ If you are on Puppet 6, you can activate the certless API instead with:
 },
 ```
 
+You can update the `auth.conf` with the following Puppet code (uses the
+[puppetlabs/puppet_authorization](https://forge.puppet.com/modules/puppetlabs/puppet_authorization) module):
+
+```puppet
+puppet_authorization::rule { 'catalog-diff certless catalog':
+  match_request_path   => '^/puppet/v4/catalog',
+  match_request_type   => 'regex',
+  match_request_method => 'post',
+  allow                => 'catalog-diff',
+  sort_order           => 500,
+  path                 => '/etc/puppetlabs/puppetserver/conf.d/auth.conf',
+}
+```
 
 ## Usage
 
