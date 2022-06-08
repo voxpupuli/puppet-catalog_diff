@@ -47,10 +47,10 @@ any of your nodes.
 This tool is delivered as a collection of Puppet Faces.
 It thus requires a Puppet 6.11 (or newer) installation to properly run.
 
-Only the system that runs the catalog-diff needs to be Puppet 6.11 or newer.
-You can run it on a Puppetserver that also provides you the old or new
-catalogs. However, you can also get catalogs from remote
-Puppetservers/PuppetDBs. PuppetDB 2.3 and newer are supported.
+Only the system that runs catalog-diff needs to be using Puppet 6.11 or newer.
+The puppetservers you are targeting to do the catalog compilation can be running
+an early version of puppet; however puppetdb must be at least version 2.3. You
+can use catalog-diff directly on a Puppetserver but also on another server.
 
 The diff tool recognizes catalogs in yaml, marshall, json, or pson formats.
 Currently automatic generation of the catalogs is done in the pson format.
