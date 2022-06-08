@@ -5,17 +5,17 @@ class catalog_diff::viewer (
   String  $password  = 'puppet',
   String  $revision  = 'master',
   Integer $port      = 1495,
-  String  $listen_ip = $::ipaddress,
+  String  $listen_ip = $facts['networking']['ip'],
 ) {
   require git
 
-  class {'apache':
+  class { 'apache':
     default_vhost     => false,
     default_ssl_vhost => false,
   }
 
-  apache::vhost {"${listen_ip}:${port}":
-    servername  => $::fqdn,
+  apache::vhost { "${listen_ip}:${port}":
+    servername  => $facts['networking']['fqdn'],
     ip          => $listen_ip,
     docroot     => '/var/www/diff',
     ip_based    => true,
@@ -37,7 +37,7 @@ class catalog_diff::viewer (
 
   htpasswd { 'puppet':
     username    => 'puppet',
-    cryptpasswd => htpasswd::ht_crypt($password, $::uuid),
+    cryptpasswd => htpasswd::ht_crypt($password, $facts['dmi']['product']['uuid']),
     target      => '/var/www/.htpasswd',
   }
 
