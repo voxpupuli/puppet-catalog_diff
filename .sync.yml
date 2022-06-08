@@ -1,29 +1,4 @@
 ---
-".travis.yml":
-  user: camptocamp
-  secure: "K4iXyf0gsTwNZ9m8a+lxOZROp2DK7BOkU34M7O7cq8RKjOJ1UInO4Ewni3el+2o6zJ1mTZmaBfBAetnimaKnoiADTG5V6MfJIST0M8xzVdlXppqel9//UNyDaynId9AxIg17XjO86xDm3F4X3HaPhgXRraUEpzrgVRXppTVyzrlV5Zn2nUqxJ7LW9HQ4Q3l4vIm00qUfjeTsqW3HJZ6l6947jvpUGdFf7tv+Tcjarjm71TRtPmEtUpPChTOKKQoBdDMCOqzAB4kvpZa8/WRNyQKpNSJIzaOVVoVdCxtW/TRoIR1Jg+mOyTEnTJIjcTwPeuIyFGAJKnKd/Si1vGBmGWkgEtyqQuVjWLBMIxsEP21d5OUPGMhoFabcGDR/C0ppdX7w1DPTqwsn3SES+JbSIdFPh6jcI0QSqXs1k+NCu62Hhj7VzCjBLI55Npay8ukpoY2OBOM8Eg+H3IYENm8Y+8u8vELHUdmB7YQGQUhx3huzbc6xO+M5YQf6fVdG/fgLPea8apoKTbpZfoiIoS+rP9sl0df3c6DTdpn4kMGAzBt/5tngmhR3uwlXgwGwQT+DTnKahLGPWzn+ITecbN8MxYBmkmXy4aQ09m0OAiiagmQlsHX7K+h6hw2Lu5yIPGsFTluRzGsF8T9J9hNCjmPKVZacKRcFRgA8E92J9i4QA+k="
-
-".gitlab-ci.yml":
-  delete: true
-
-".rubocop.yml":
-  default_configs:
-    require:
-    - rubocop-rspec
-    inherit_from: .rubocop_todo.yml
-
-
-Gemfile:
-  use_litmus: true
-  optional:
-    ":development":
-    - gem: github_changelog_generator
-      condition: Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('2.2.2')
-    - gem: coveralls
-
-spec/spec_helper.rb:
-  mock_with: ":rspec"
-  coverage_report: true
-
-Rakefile:
-  changelog_since_tag: v1.6.0
+.puppet-lint.rc:
+  enabled_lint_checks:
+    - parameter_types
