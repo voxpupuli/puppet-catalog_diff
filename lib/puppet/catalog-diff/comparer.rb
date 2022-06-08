@@ -147,11 +147,10 @@ module Puppet::CatalogDiff
       end
 
       return nil if sum1 == sum2
+      return nil unless str1 && str2
 
       str1 = validate_encoding(str1)
       str2 = validate_encoding(str2)
-
-      return nil unless str1 && str2
 
       @@cached_str_diffs ||= {}
       @@cached_str_diffs["#{sum1}/#{sum2}"] ||= do_str_diff(str1, str2)
