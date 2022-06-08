@@ -13,8 +13,6 @@ end
 group :development do
   gem 'guard-rake',                  :require => false
   gem 'overcommit', '>= 0.39.1',     :require => false
-  gem 'github_changelog_generator',  :require => false
-  gem 'coveralls',                   :require => false
 end
 
 group :system_tests do
