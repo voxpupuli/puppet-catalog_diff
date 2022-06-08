@@ -23,7 +23,7 @@
     1. [Changed depth](#changed-depth)
     1. [Output report](#output-report)
 1. [Limitations](#limitations)
-1. [Authors](#authors)
+1. [Previous Authors](#previous-authors)
 1. [Contributors](#contributors)
 1. [See Also](#see-also)
     1. [Upload facts to PuppetDB](#upload-facts-to-puppetdb)
@@ -232,10 +232,10 @@ viewed in markdown using the Rakefile in this directory.
 A web viewer is also available at [https://github.com/camptocamp/puppet-catalog-diff-viewer](https://github.com/camptocamp/puppet-catalog-diff-viewer)
 
 
-## Authors
+## Previous Authors
 
-R.I.Pienaar <rip@devco.net> / www.devco.net / @ripienaar  
-Zack Smith <zack@puppetlabs.com> / @acidprime  
+R.I.Pienaar <rip@devco.net> / www.devco.net / @ripienaar
+Zack Smith <zack@puppetlabs.com> / @acidprime
 Raphaël Pinson <raphael.pinson@camptocamp.com> / @raphink
 
 
