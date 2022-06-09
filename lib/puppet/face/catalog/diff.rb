@@ -14,6 +14,9 @@ Puppet::Face.define(:catalog, '0.0.1') do
     summary 'Compare catalogs from different puppet versions.'
     arguments '<catalog1> <catalog2>'
     puppetdb_url = Puppet::Util::Puppetdb.config.server_urls[0]
+    hostcert = Puppet.settings[:hostcert]
+    hostprivkey = Puppet.settings[:hostprivkey]
+    localcacert = Puppet.settings[:localcacert]
 
     option '--fact_search=' do
       summary 'Fact search used to filter which catalogs are compiled and compared'
@@ -83,6 +86,21 @@ Puppet::Face.define(:catalog, '0.0.1') do
     option '--old_puppetdb=' do
       summary 'URI to PuppetDB to find nodes if --node_list is not set. Also used to download old catalogs. Defaults to first server in puppetdb.conf'
       default_to { puppetdb_url }
+    end
+
+    option '--old_puppetdb_tls_cert=' do
+      summary "Optional absolute path to a client certificate to authenticate against the old PuppetDB. If not provided, the Puppet Agent default certificate will be used. Defaults to #{hostcert}."
+      default_to { hostcert }
+    end
+
+    option '--old_puppetdb_tls_key=' do
+      summary "Optional absolute path to a TLS private key in pem format. If not provided, the Puppet Agent default key will be used. Defaults to #{hostprivkey}."
+      default_to { hostprivkey }
+    end
+
+    option '--old_puppetdb_tls_ca=' do
+      summary "Optional absolute path to a CA pem file. If not provided, the Puppet Agent CA will be used. Defaults to #{localcacert}."
+      default_to { localcacert }
     end
 
     option '--new_puppetdb=' do
@@ -186,6 +204,9 @@ Puppet::Face.define(:catalog, '0.0.1') do
           old_catalog_from_puppetdb: options[:old_catalog_from_puppetdb],
           new_catalog_from_puppetdb: options[:new_catalog_from_puppetdb],
           old_puppetdb: options[:old_puppetdb],
+          old_puppetdb_tls_cert: options[:old_puppetdb_tls_cert],
+          old_puppetdb_tls_key: options[:old_puppetdb_tls_key],
+          old_puppetdb_tls_ca: options[:old_puppetdb_tls_ca],
           new_puppetdb: options[:new_puppetdb],
           node_list: options[:node_list]
         )

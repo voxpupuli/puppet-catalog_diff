@@ -14,7 +14,7 @@ module Puppet::CatalogDiff
       old_env = options[:old_server].split('/')[1]
       Puppet.debug('Using PuppetDB to find active nodes')
       filter_env = options[:filter_old_env] ? old_env : nil
-      active_nodes = find_nodes_puppetdb(filter_env, options[:puppetdb])
+      active_nodes = find_nodes_puppetdb(filter_env, options[:puppetdb], options[:puppetdb_tls_cert], options[:puppetdb_tls_key], options[:puppetdb_tls_ca])
       raise 'No active nodes were returned from your fact search' if active_nodes.empty?
 
       active_nodes
@@ -41,9 +41,22 @@ module Puppet::CatalogDiff
       query
     end
 
-    def get_puppetdb_version(server)
+    def build_ssl_context(puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
+      # Load certificates to make a connection to a possible foreign PuppetDB
+      x509 = Puppet::X509::CertProvider.new
+      cacerts = x509.load_cacerts_from_pem(File.read(puppetdb_tls_ca, encoding: Encoding::UTF_8))
+      client_cert = x509.load_client_cert_from_pem(File.read(puppetdb_tls_cert, encoding: Encoding::UTF_8))
+      private_key = x509.load_private_key_from_pem(File.read(puppetdb_tls_key, encoding: Encoding::UTF_8))
+      prov = Puppet::SSL::SSLProvider.new
+      prov.create_context(revocation: false, cacerts: cacerts, private_key: private_key, client_cert: client_cert, include_system_store: true, crls: [])
+    end
+
+    def get_puppetdb_version(server, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
       headers = { 'Accept' => 'application/json' }
-      result = Puppet.runtime[:http].get(URI("#{server}/pdb/meta/v1/version"), headers: headers)
+      ssl_context = build_ssl_context(puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
+      Puppet.debug("connecting to #{server}")
+      uri = URI("#{server}/pdb/meta/v1/version")
+      result = Puppet.runtime[:http].get(uri, headers: headers, options: { ssl_context: ssl_context })
       if result.code == 200
         body = JSON.parse(result.body)
         version = body['version']
@@ -55,14 +68,16 @@ module Puppet::CatalogDiff
       version
     end
 
-    def find_nodes_puppetdb(env, puppetdb)
-      puppetdb_version = get_puppetdb_version(puppetdb)
+    def find_nodes_puppetdb(env, puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
+      puppetdb_version = get_puppetdb_version(puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
       query = build_query(env, puppetdb_version)
       json_query = URI.escape(query.to_json)
       headers = { 'Accept' => 'application/json' }
       Puppet.debug("Querying #{puppetdb} for environment #{env}")
       begin
-        result = Puppet.runtime[:http].get(URI("#{puppetdb}/pdb/query/v4/nodes?query=#{json_query}"), headers: headers)
+        ssl_context = build_ssl_context(puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
+        uri = URI("#{puppetdb}/pdb/query/v4/nodes?query=#{json_query}")
+        result = Puppet.runtime[:http].get(uri, headers: headers, options: { ssl_context: ssl_context })
         if result.code >= 400
           puppetdb_version = '2.3'
           Puppet.debug("Query returned HTTP code #{result.code}. Falling back to older version of API used in PuppetDB version #{puppetdb_version}.")
