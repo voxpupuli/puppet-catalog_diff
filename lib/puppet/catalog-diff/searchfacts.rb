@@ -13,7 +13,7 @@ module Puppet::CatalogDiff
       # Pull all nodes from PuppetDB
       old_env = options[:old_server].split('/')[1]
       Puppet.debug('Using PuppetDB to find active nodes')
-      filter_env = (options[:filter_old_env]) ? old_env : nil
+      filter_env = options[:filter_old_env] ? old_env : nil
       active_nodes = find_nodes_puppetdb(filter_env, options[:puppetdb])
       if active_nodes.empty?
         raise 'No active nodes were returned from your fact search'
