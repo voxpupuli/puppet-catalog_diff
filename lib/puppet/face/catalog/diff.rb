@@ -236,24 +236,29 @@ Puppet::Face.define(:catalog, '0.0.1') do
 
         format.node_summary_header(node, summary, :node_percentage) + summary.map { |header, value|
           next if value.nil?
+
           if value.is_a?(Hash)
             value.map do |resource_id, resource|
               next if resource.nil?
+
               if resource.is_a?(Hash) && resource.key?(:type)
                 # If we find an actual resource print it out
                 format.resource_reference(header, resource_id, resource)
               elsif resource.is_a?(Array)
                 next unless resource.any?
+
                 # Format string diffs
                 format.string_diff(header, resource_id, resource)
               else
                 next if resource.nil?
+
                 # Format hash diffs
                 format.params_diff(header, resource_id, resource)
               end
             end
           elsif value.is_a?(Array)
             next if value.empty?
+
             # Format arrays
             format.list(header, value)
           else

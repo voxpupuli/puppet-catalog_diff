@@ -28,6 +28,7 @@ module Puppet::CatalogDiff
         Puppet.err("Server returned invalid catalog for #{node_name}")
         save_catalog_to_disk(save_directory, node_name, catalog, 'error')
         raise e.message if catalog =~ %r{.document_type.:.Catalog.}
+
         raise catalog
       end
     end
@@ -42,6 +43,7 @@ module Puppet::CatalogDiff
       if node.parameters['clientcert'] != node_name
         raise "The node retrieved from yaml terminus is a mismatch node returned was (#{node.parameters['clientcert']})"
       end
+
       node.environment
     end
 
@@ -58,6 +60,7 @@ module Puppet::CatalogDiff
       unless ret.success?
         raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}"
       end
+
       begin
         catalog = PSON.parse(ret.body)
       rescue PSON::ParserError => e
@@ -118,6 +121,7 @@ module Puppet::CatalogDiff
       if catalog.key?('issue_kind')
         raise catalog['message']
       end
+
       if certless
         catalog = catalog['catalog']
       end
@@ -127,6 +131,7 @@ module Puppet::CatalogDiff
     def render_pson(catalog)
       pson = PSON.pretty_generate(catalog, allow_nan: true, max_nesting: false)
       raise "Could not render catalog as pson, #{catalog}" unless pson
+
       pson
     end
 

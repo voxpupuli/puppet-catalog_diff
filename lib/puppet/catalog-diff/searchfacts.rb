@@ -18,6 +18,7 @@ module Puppet::CatalogDiff
       if active_nodes.empty?
         raise 'No active nodes were returned from your fact search'
       end
+
       active_nodes
     end
 

@@ -54,6 +54,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
       unless save_directory =~ %r{.*/.*}
         raise "The directory path passed (#{save_directory}) is not an absolute path, mismatched arguments?"
       end
+
       unless File.directory?(save_directory)
         Puppet.debug("Directory did not exist, creating #{save_directory}")
         FileUtils.mkdir(save_directory)
@@ -92,6 +93,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
     when_rendering :console do |output|
       output.map { |key|
         next unless key == :compiled_nodes
+
         key.each do |node|
           "Compiled Node: #{node}"
         end
