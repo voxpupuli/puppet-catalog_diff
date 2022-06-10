@@ -81,9 +81,9 @@ Puppet::Face.define(:catalog, '0.0.1') do
       require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'catalog-diff', 'compilecatalog.rb'))
       options[:puppetdb] = options[:old_puppetdb]
       nodes = if options[:node_list].nil?
-        Puppet::CatalogDiff::SearchFacts.new(args).find_nodes(options)
+                Puppet::CatalogDiff::SearchFacts.new(args).find_nodes(options)
               else
-        options[:node_list].split(',')
+                options[:node_list].split(',')
               end
       raise "Problem finding nodes with query #{args}" unless nodes
 
