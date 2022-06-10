@@ -44,7 +44,7 @@ module Puppet::CatalogDiff
     end
 
     def get_puppetdb_version(server)
-      headers = { 'Accept' => 'application/json'}
+      headers = { 'Accept' => 'application/json' }
       result = Puppet.runtime[:http].get(URI("#{server}/pdb/meta/v1/version"), headers: headers)
       if result.code == 200
         body = JSON.parse(result.body)
@@ -61,7 +61,7 @@ module Puppet::CatalogDiff
       puppetdb_version = get_puppetdb_version(puppetdb)
       query = build_query(env, puppetdb_version)
       json_query = URI.escape(query.to_json)
-      headers = { 'Accept' => 'application/json'}
+      headers = { 'Accept' => 'application/json' }
       Puppet.debug("Querying #{puppetdb} for environment #{env}")
       begin
         result = Puppet.runtime[:http].get(URI("#{puppetdb}/pdb/query/v4/nodes?query=#{json_query}"), headers: headers)

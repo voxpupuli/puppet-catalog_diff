@@ -55,7 +55,7 @@ module Puppet::CatalogDiff
       query.concat([['=', 'environment', environment]])
       json_query = URI.encode_www_form_component(query.to_json)
       request_url = URI("#{puppetdb}/pdb/query/v4/catalogs?query=#{json_query}")
-      headers = { 'Accept-Content' => 'application/json'}
+      headers = { 'Accept-Content' => 'application/json' }
       ret = Puppet.runtime[:http].get(request_url, headers: headers)
       unless ret.success?
         raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}"
