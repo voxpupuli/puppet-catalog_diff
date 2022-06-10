@@ -23,7 +23,7 @@ module Puppet::CatalogDiff
     end
 
     def build_query(env, version)
-      base_query = ['and', ['=', ['node', 'active'], true]]
+      base_query = ['and', ['=', %w[node active], true]]
       query_field_catalog_environment = Puppet::Util::Package.versioncmp(version, '3') >= 0 ? 'catalog_environment' : 'catalog-environment'
       base_query.concat([['=', query_field_catalog_environment, env]]) if env
       real_facts = @facts.reject { |_k, v| v.nil? }

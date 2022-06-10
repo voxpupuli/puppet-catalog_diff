@@ -60,7 +60,7 @@ describe Puppet::CatalogDiff::Comparer do
 
   describe 'extract_titles' do
     it 'returns resource ids' do
-      extract_titles(resources1).should eq(['foo', 'bar'])
+      extract_titles(resources1).should eq(%w[foo bar])
     end
   end
 
