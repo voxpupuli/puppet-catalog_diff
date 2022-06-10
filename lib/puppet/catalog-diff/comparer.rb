@@ -122,7 +122,7 @@ module Puppet::CatalogDiff
 
     def validate_encoding(str)
       unless str.valid_encoding?
-        Puppet::debug("Detected that string used in diff had invalid #{str.encoding} encoding. Replacing invalid characters in diff output.")
+        Puppet.debug("Detected that string used in diff had invalid #{str.encoding} encoding. Replacing invalid characters in diff output.")
         str.encode!('UTF-8', 'UTF-8', invalid: :replace)
       end
       str
