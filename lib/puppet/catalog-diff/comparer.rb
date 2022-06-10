@@ -92,6 +92,7 @@ module Puppet::CatalogDiff
     def sort_dependencies!(params)
       params.each do |x|
         next unless [:require, :before, :notify, :subscribe].include?(x[0])
+
         if x[1].class == Array
           x[1].sort!
         end
