@@ -93,7 +93,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
       failed_nodes = {}
       mutex = Mutex.new
 
-      Array.new(thread_count) {
+      Array.new(thread_count) do
         Thread.new(nodes, compiled_nodes, options) do |nodes, compiled_nodes, options|
           Puppet.debug(nodes)
           while node_name = mutex.synchronize { nodes.pop }
@@ -140,7 +140,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
             end
           end
         end
-      }.each(&:join)
+      end.each(&:join)
       output = {}
       output[:failed_nodes]         = failed_nodes
       output[:failed_nodes_total]   = failed_nodes.size
@@ -168,11 +168,11 @@ Puppet::Face.define(:catalog, '0.0.1') do
       output[:failed_to_compile_files] = most_changed.reverse.take(options[:changed_depth].to_i)
 
       example_errors = output[:failed_to_compile_files].map do |file_hash|
-        example_error = file_hash.map { |file_name, _metric|
+        example_error = file_hash.map do |file_name, _metric|
           example_node = problem_files[file_name].first
           error = failed_nodes[example_node].to_s
           Hash[error => example_node]
-        }.first
+        end.first
         example_error
       end
       output[:example_compile_errors] = example_errors
@@ -181,13 +181,13 @@ Puppet::Face.define(:catalog, '0.0.1') do
     when_rendering :console do |output|
       require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'catalog-diff', 'formater.rb'))
       format = Puppet::CatalogDiff::Formater.new
-      output.map { |key, value|
+      output.map do |key, value|
         if value.is_a?(Array) && key == :failed_to_compile_files
           format.list_file_hash(key, value)
         elsif value.is_a?(Array) && key == :example_compile_errors
           format.list_error_hash(key, value)
         end
-      }.join("\n")
+      end.join("\n")
     end
   end
 end

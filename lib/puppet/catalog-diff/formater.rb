@@ -76,9 +76,9 @@ module Puppet::CatalogDiff
     end
 
     def string_diff(header, resource_id, resource)
-      list = "\t#{resource_id.capitalize}\n" + resource.map { |k|
+      list = "\t#{resource_id.capitalize}\n" + resource.map do |k|
         k.to_s
-      }.join("\n")
+      end.join("\n")
       "\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n#{list}"
     end
 
@@ -86,52 +86,52 @@ module Puppet::CatalogDiff
       if resource.is_a?(String)
         "\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n\t#{resource_id.capitalize}:\n#{resource}"
       else
-        params = resource.map { |k, v|
+        params = resource.map do |k, v|
           "\t#{k} = #{v}"
-        }.join("\n")
+        end.join("\n")
         "\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n\t#{resource_id.capitalize}:\n#{params}"
       end
     end
 
     def list(header, value)
-      list = value.map { |k|
+      list = value.map do |k|
         "\t#{k}"
-      }.join("\n")
+      end.join("\n")
       "\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n#{list}"
     end
 
     def list_hash(header, value, mark = '%')
       number = 0
-      list = value.map { |hash|
+      list = value.map do |hash|
         number += 1
         hash.map do |key, val|
           header_spacing = ' ' * (79 - ("#{number}. #{key}".length + ((mark == '%' && '%.2f' % val || val)).to_s.to_s.length))
           "#{number}. #{key}#{header_spacing}#{(mark == '%' && '%.2f' % val || val)}#{mark}"
         end
-      }.join("\n")
+      end.join("\n")
       "\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n#{list}"
     end
 
     def list_error_hash(header, value)
       number = 0
-      list = value.map { |hash|
+      list = value.map do |hash|
         number += 1
         hash.map do |key, val|
           "\033[1m#{number}. #{val}\033[0m\n\t#{key}\n"
         end
-      }.join("\n")
+      end.join("\n")
       "\n#{'-' * 80}\n\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n#{'-' * 80}\n#{list}"
     end
 
     def list_file_hash(header, value)
       number = 0
-      list = value.map { |hash|
+      list = value.map do |hash|
         number += 1
         hash.map do |key, val|
           header_spacing = ' ' * (79 - ('    Affected nodes'.length + val.to_s.length))
           "#{number}. #{key}\n    Affected nodes:#{header_spacing}#{val}"
         end
-      }.join("\n")
+      end.join("\n")
       "\n#{'-' * 80}\n\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n#{'-' * 80}\n#{list}"
     end
 
@@ -140,13 +140,13 @@ module Puppet::CatalogDiff
     end
 
     def render_pull(output)
-      output.map { |key, value|
+      output.map do |key, value|
         if value.is_a?(Array) && key == :failed_to_compile_files
           list_file_hash('Failed to compiled sorted by file', value)
         elsif value.is_a?(Array) && key == :example_compile_errors
           list_error_hash(key, value)
         end
-      }.join("\n") + node_summary_header("#{output[:failed_nodes_total]} out of #{output[:total_nodes]} nodes failed to compile. failure rate:", output, :total_percentage).to_s
+      end.join("\n") + node_summary_header("#{output[:failed_nodes_total]} out of #{output[:total_nodes]} nodes failed to compile. failure rate:", output, :total_percentage).to_s
     end
   end
 end
