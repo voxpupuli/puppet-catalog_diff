@@ -93,7 +93,7 @@ describe Puppet::CatalogDiff::Comparer do
       
       ruby_default_replacement_string_for_invalid_characters = '�'
       expect(diffs[:string_diffs]['file.foo'][3]).to \
-        eq("-\t     content => \"" + ruby_default_replacement_string_for_invalid_characters + "\"")
+        eq("-\t     content => \"" + ruby_default_replacement_string_for_invalid_characters + '"')
     end
 
     it 'returns a diff without path parameter' do
