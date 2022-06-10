@@ -232,7 +232,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
 
       format = Puppet::CatalogDiff::Formater.new
       nodes.map do |node, summary|
-        next if [:total_percentage, :total_nodes, :most_changed, :with_changes, :most_differences, :pull_output, :date, :all_changed_nodes].include?(node)
+        next if %i[total_percentage total_nodes most_changed with_changes most_differences pull_output date all_changed_nodes].include?(node)
 
         format.node_summary_header(node, summary, :node_percentage) + summary.map do |header, value|
           next if value.nil?
