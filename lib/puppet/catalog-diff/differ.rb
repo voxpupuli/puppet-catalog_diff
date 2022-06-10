@@ -35,9 +35,7 @@ module Puppet::CatalogDiff
       to_meta = {}
       { from_file => [from, from_meta], to_file => [to, to_meta] }.each do |r, a|
         v, m = a
-        unless File.exist?(r)
-          raise "Cannot find resources in #{r}"
-        end
+        raise "Cannot find resources in #{r}" unless File.exist?(r)
 
         case File.extname(r)
         when '.yaml'

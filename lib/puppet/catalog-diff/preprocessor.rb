@@ -39,9 +39,7 @@ module Puppet::CatalogDiff
           resource[:parameters][param] = value
         end
 
-        if resource[:parameters].include?(:content) && resource[:parameters][:content].is_a?(String)
-          resource[:parameters][:content] = { checksum: Digest::MD5.hexdigest(resource[:parameters][:content]), content: resource[:parameters][:content] }
-        end
+        resource[:parameters][:content] = { checksum: Digest::MD5.hexdigest(resource[:parameters][:content]), content: resource[:parameters][:content] } if resource[:parameters].include?(:content) && resource[:parameters][:content].is_a?(String)
 
         resource[:resource_id] = "#{target.type.downcase}[#{target.title}]"
         collector << resource

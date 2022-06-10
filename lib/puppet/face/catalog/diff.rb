@@ -134,9 +134,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
       # raise "You must pass unique paths to the arguments (#{catalog1} = #{catalog2})" if catalog1 == catalog2
 
       # Sanity check for mismatched arguments
-      if File.directory?(catalog1) && File.file?(catalog2) || File.file?(catalog1) && File.directory?(catalog2)
-        raise 'You must pass a file,diretory or hostname to both parameters'
-      end
+      raise 'You must pass a file,diretory or hostname to both parameters' if File.directory?(catalog1) && File.file?(catalog2) || File.file?(catalog1) && File.directory?(catalog2)
 
       nodes = {}
 
