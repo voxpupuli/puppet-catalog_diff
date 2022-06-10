@@ -88,7 +88,7 @@ describe Puppet::CatalogDiff::Comparer do
       
       latin1_string = [246].pack('C*').force_encoding('UTF-8')
       res1[0][:parameters][:content] = latin1_string 
-      expect {compare_resources(res1, res2, show_resource_diff: true)}.not_to raise_error
+      expect { compare_resources(res1, res2, show_resource_diff: true) }.not_to raise_error
       diffs = compare_resources(res1, res2, show_resource_diff: true)
       
       ruby_default_replacement_string_for_invalid_characters = '�'
