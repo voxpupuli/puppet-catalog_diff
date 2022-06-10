@@ -76,8 +76,7 @@ module Puppet::CatalogDiff
       rescue PSON::ParserError => e
         raise "Error parsing json output of puppet search: #{e.message}"
       end
-      names = filtered.map { |node| node['certname'] }
-      names
+      filtered.map { |node| node['certname'] }
     end
   end
 end
