@@ -103,9 +103,9 @@ module Puppet::CatalogDiff
               else
                 Puppet.runtime[:http].get(uri, headers: headers)
               end
-      unless ret.success?
-        raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}"
-      end
+        unless ret.success?
+          raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}"
+        end
       rescue Exception => e
         raise "Failed to retrieve catalog for #{node_name} from #{server} in environment #{environment}: #{e.message}"
       end
