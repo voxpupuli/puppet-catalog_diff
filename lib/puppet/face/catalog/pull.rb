@@ -82,7 +82,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
       options[:puppetdb] = options[:old_puppetdb]
       nodes = if options[:node_list].nil?
         Puppet::CatalogDiff::SearchFacts.new(args).find_nodes(options)
-      else
+              else
         options[:node_list].split(',')
       end
       raise "Problem finding nodes with query #{args}" unless nodes
