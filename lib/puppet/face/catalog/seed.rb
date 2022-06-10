@@ -1,10 +1,12 @@
 require 'puppet/face'
 require 'thread'
+require 'puppet/util/puppetdb'
 
 Puppet::Face.define(:catalog, '0.0.1') do
   action :seed do
     summary 'Generate a series of catalogs'
     arguments '<path/to/seed/directory> fact=CaseSensitiveValue'
+    puppetdb_url = Puppet::Util::Puppetdb.config.server_urls[0]
 
     option '--master_server SERVER' do
       summary 'The server from which to download the catalogs from'
@@ -17,6 +19,11 @@ Puppet::Face.define(:catalog, '0.0.1') do
 
     option '--catalog_from_puppetdb' do
       summary 'Get catalog from PuppetDB instead of compile master'
+    end
+
+    option '--puppetdb=' do
+      summary "URI to the PuppetDB, defaults to #{puppetdb_url}"
+      default_to { puppetdb_url }
     end
 
     description <<-'EOT'
@@ -64,7 +71,8 @@ Puppet::Face.define(:catalog, '0.0.1') do
                 node_name, save_directory,
                 options[:master_server],
                 options[:certless],
-                options[:catalog_from_puppetdb]
+                options[:catalog_from_puppetdb],
+                options[:puppetdb]
               )
               mutex.synchronize { compiled_nodes << node_name }
             rescue Exception => e
