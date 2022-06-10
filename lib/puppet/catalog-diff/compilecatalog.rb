@@ -158,7 +158,7 @@ module Puppet::CatalogDiff
     def redact_sensitive(data)
       if data.is_a?(Hash) && data.key?('__ptype')
         data[:catalog_diff_hash] = Digest::SHA256.hexdigest Marshal.dump(data['__pvalue'])
-        data.reject! { |k| k == '__ptype' || k == '__pvalue' }
+        data.reject! { |k| %w[__ptype __pvalue].include?(k) }
       elsif data.is_a? Hash
         data.each do |_k, v|
           redact_sensitive(v) if v.is_a?(Hash) || v.is_a?(Array)
