@@ -36,9 +36,10 @@ module Puppet::CatalogDiff
     end
 
     def format_value(v, indent = '', do_indent = false, comma = '', k = nil)
-      if v.is_a?(Array)
+      case v
+      when Array
         format_array(v, indent, do_indent, comma)
-      elsif v.is_a?(Hash)
+      when Hash
         format_hash(v, indent, do_indent, comma)
       else
         v = v[:checksum] if k == :content && v.is_a?(Hash)
