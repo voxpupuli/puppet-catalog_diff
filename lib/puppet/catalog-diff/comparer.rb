@@ -93,7 +93,7 @@ module Puppet::CatalogDiff
       params.each do |x|
         next unless %i[require before notify subscribe].include?(x[0])
 
-        if x[1].class == Array
+        if x[1].instance_of?(Array)
           x[1].sort!
         end
       end
