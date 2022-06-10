@@ -109,9 +109,9 @@ module Puppet::CatalogDiff
       subtractions = resource_diffs_titles[:titles_only_in_old].size
       changes      = resource_diffs[:new_params].keys.size
 
-      changes_percentage      = (titles[:from].size.zero? && 0 || 100 * (resource_diffs[:new_params].keys.size.to_f / titles[:from].size.to_f))
-      additions_percentage    = (titles[:to].size.zero?   && 0 || 100 * (additions.to_f / titles[:to].size.to_f))
-      subtractions_percentage = (titles[:from].size.zero? && 0 || 100 * (subtractions.to_f / titles[:from].size.to_f))
+      changes_percentage      = (titles[:from].size.zero? && 0 || 100 * (resource_diffs[:new_params].keys.size.to_f / titles[:from].size))
+      additions_percentage    = (titles[:to].size.zero?   && 0 || 100 * (additions.to_f / titles[:to].size))
+      subtractions_percentage = (titles[:from].size.zero? && 0 || 100 * (subtractions.to_f / titles[:from].size))
 
       output[:catalag_percentage_added]   = '%.2f' % additions_percentage
       output[:catalog_percentage_removed] = '%.2f' % subtractions_percentage
