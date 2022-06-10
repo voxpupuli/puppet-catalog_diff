@@ -26,7 +26,7 @@ module Puppet::CatalogDiff
       base_query = ['and', ['=', %w[node active], true]]
       query_field_catalog_environment = Puppet::Util::Package.versioncmp(version, '3') >= 0 ? 'catalog_environment' : 'catalog-environment'
       base_query.concat([['=', query_field_catalog_environment, env]]) if env
-      real_facts = @facts.reject { |_k, v| v.nil? }
+      real_facts = @facts.compact
       query = base_query.concat(real_facts.map { |k, v| ['=', ['fact', k], v] })
       classes = Hash[@facts.select { |_k, v| v.nil? }].keys
       classes.each do |c|
