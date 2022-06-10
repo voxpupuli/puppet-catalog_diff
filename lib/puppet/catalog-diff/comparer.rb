@@ -102,8 +102,8 @@ module Puppet::CatalogDiff
     # Takes arrays of resource titles and shows the differences
     def return_resource_diffs(old, new)
       {
-        titles_only_in_old: (old - new).map { |r| r.to_s },
-        titles_only_in_new: (new - old).map { |r| r.to_s },
+        titles_only_in_old: (old - new).map(&:to_s),
+        titles_only_in_new: (new - old).map(&:to_s),
       }
     end
 
@@ -116,7 +116,7 @@ module Puppet::CatalogDiff
         tempfile
       end
       diff = Puppet::Util::Diff.diff(paths[0].path, paths[1].path)
-      paths.each { |f| f.delete }
+      paths.each(&:delete)
       diff
     end
 
