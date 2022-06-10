@@ -13,7 +13,7 @@ module Puppet::CatalogDiff
       # Pull all nodes from PuppetDB
       old_env = options[:old_server].split('/')[1]
       Puppet.debug('Using PuppetDB to find active nodes')
-      filter_env = (options[:filter_old_env]) ? old_env : nil
+      filter_env = options[:filter_old_env] ? old_env : nil
       active_nodes = find_nodes_puppetdb(filter_env, options[:puppetdb])
       if active_nodes.empty?
         raise 'No active nodes were returned from your fact search'
@@ -23,7 +23,7 @@ module Puppet::CatalogDiff
     end
 
     def build_query(env, version)
-      base_query = ['and', ['=', ['node', 'active'], true]]
+      base_query = ['and', ['=', %w[node active], true]]
       query_field_catalog_environment = Puppet::Util::Package.versioncmp(version, '3') >= 0 ? 'catalog_environment' : 'catalog-environment'
       base_query.concat([['=', query_field_catalog_environment, env]]) if env
       real_facts = @facts.reject { |_k, v| v.nil? }

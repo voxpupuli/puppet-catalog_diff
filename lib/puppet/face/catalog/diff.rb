@@ -217,7 +217,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
         Hash[node => summary[:node_differences]]
       end
       total_nodes = nodes.size
-      nodes[:total_percentage]   = (nodes.map { |_node, summary| summary.is_a?(Hash) && summary[:node_percentage] || nil }.compact.reduce { |sum, x| sum.to_f + x } / total_nodes)
+      nodes[:total_percentage]   = (nodes.map { |_node, summary| summary.is_a?(Hash) && summary[:node_percentage] || nil }.compact.reduce { |acc, elem| acc.to_f + elem } / total_nodes)
       nodes[:with_changes]       = with_changes.size
       nodes[:most_changed]       = most_changed.reverse.take((options.key?(:changed_depth) && options[:changed_depth].to_i || 10))
       nodes[:most_differences]   = most_differences.reverse.take((options.key?(:changed_depth) && options[:changed_depth].to_i || 10))
@@ -232,7 +232,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
 
       format = Puppet::CatalogDiff::Formater.new
       nodes.map do |node, summary|
-        next if [:total_percentage, :total_nodes, :most_changed, :with_changes, :most_differences, :pull_output, :date, :all_changed_nodes].include?(node)
+        next if %i[total_percentage total_nodes most_changed with_changes most_differences pull_output date all_changed_nodes].include?(node)
 
         format.node_summary_header(node, summary, :node_percentage) + summary.map do |header, value|
           next if value.nil?
