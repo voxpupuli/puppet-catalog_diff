@@ -55,7 +55,7 @@ module Puppet::CatalogDiff
       query.concat([['=', 'environment', environment]])
       json_query = URI.encode_www_form_component(query.to_json)
       request_url = URI("#{puppetdb}/pdb/query/v4/catalogs?query=#{json_query}")
-      headers = { 'Accept-Content' => 'application/json'}
+      headers = { 'Accept-Content' => 'application/json' }
       ret = Puppet.runtime[:http].get(request_url, headers: headers)
       unless ret.success?
         raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}"
@@ -158,7 +158,7 @@ module Puppet::CatalogDiff
     def redact_sensitive(data)
       if data.is_a?(Hash) && data.key?('__ptype')
         data[:catalog_diff_hash] = Digest::SHA256.hexdigest Marshal.dump(data['__pvalue'])
-        data.reject! { |k| k == '__ptype' || k == '__pvalue' }
+        data.reject! { |k| %w[__ptype __pvalue].include?(k) }
       elsif data.is_a? Hash
         data.each do |_k, v|
           redact_sensitive(v) if v.is_a?(Hash) || v.is_a?(Array)

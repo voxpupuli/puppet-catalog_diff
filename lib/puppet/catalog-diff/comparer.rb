@@ -93,7 +93,7 @@ module Puppet::CatalogDiff
       params.each do |x|
         next unless %i[require before notify subscribe].include?(x[0])
 
-        if x[1].class == Array
+        if x[1].instance_of?(Array)
           x[1].sort!
         end
       end
@@ -123,7 +123,7 @@ module Puppet::CatalogDiff
     def validate_encoding(str)
       unless str.valid_encoding?
         Puppet::debug("Detected that string used in diff had invalid #{str.encoding} encoding. Replacing invalid characters in diff output.")
-        str.encode!('UTF-8', 'UTF-8', :invalid => :replace)
+        str.encode!('UTF-8', 'UTF-8', invalid: :replace)
       end
       str
     end

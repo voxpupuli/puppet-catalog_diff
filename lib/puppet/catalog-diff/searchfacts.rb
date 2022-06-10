@@ -26,12 +26,12 @@ module Puppet::CatalogDiff
       base_query = ['and', ['=', %w[node active], true]]
       query_field_catalog_environment = Puppet::Util::Package.versioncmp(version, '3') >= 0 ? 'catalog_environment' : 'catalog-environment'
       base_query.concat([['=', query_field_catalog_environment, env]]) if env
-      real_facts = @facts.reject { |_k, v| v.nil? }
+      real_facts = @facts.compact
       query = base_query.concat(real_facts.map { |k, v| ['=', ['fact', k], v] })
       classes = Hash[@facts.select { |_k, v| v.nil? }].keys
       classes.each do |c|
         capit = c.split('::').map(&:capitalize).join('::')
-        query = query.concat(
+        query.concat(
           [['in', 'certname',
             ['extract', 'certname',
              ['select-resources',
@@ -44,7 +44,7 @@ module Puppet::CatalogDiff
     end
 
     def get_puppetdb_version(server)
-      headers = { 'Accept' => 'application/json'}
+      headers = { 'Accept' => 'application/json' }
       result = Puppet.runtime[:http].get(URI("#{server}/pdb/meta/v1/version"), headers: headers)
       if result.code == 200
         body = JSON.parse(result.body)
@@ -61,7 +61,7 @@ module Puppet::CatalogDiff
       puppetdb_version = get_puppetdb_version(puppetdb)
       query = build_query(env, puppetdb_version)
       json_query = URI.escape(query.to_json)
-      headers = { 'Accept' => 'application/json'}
+      headers = { 'Accept' => 'application/json' }
       Puppet.debug("Querying #{puppetdb} for environment #{env}")
       begin
         result = Puppet.runtime[:http].get(URI("#{puppetdb}/pdb/query/v4/nodes?query=#{json_query}"), headers: headers)
@@ -76,8 +76,7 @@ module Puppet::CatalogDiff
       rescue PSON::ParserError => e
         raise "Error parsing json output of puppet search: #{e.message}"
       end
-      names = filtered.map { |node| node['certname'] }
-      names
+      filtered.map { |node| node['certname'] }
     end
   end
 end
