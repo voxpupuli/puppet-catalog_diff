@@ -1,5 +1,4 @@
 require 'puppet/face'
-require 'thread'
 require 'json'
 require 'puppet/util/puppetdb'
 

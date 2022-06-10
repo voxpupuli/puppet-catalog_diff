@@ -1,5 +1,4 @@
 require 'puppet/face'
-require 'thread'
 require 'puppet/util/puppetdb'
 
 Puppet::Face.define(:catalog, '0.0.1') do

@@ -1,5 +1,4 @@
 require 'puppet/face'
-require 'thread'
 require 'digest'
 require 'puppet/util/puppetdb'
 
