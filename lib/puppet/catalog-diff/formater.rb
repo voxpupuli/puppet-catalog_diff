@@ -27,7 +27,7 @@ module Puppet::CatalogDiff
       str = ''
       str << indent if do_indent
       str << '{' << "\n"
-      keys = Hash[(v.sort_by { |key, _val| key })]
+      keys = (v.sort_by { |key, _val| key }).to_h
       keys.each_pair do |key, val|
         str << "\t     #{indent}     #{key} => "
         str << format_value(val, "#{indent}     ", true, ',', key)
@@ -51,7 +51,7 @@ module Puppet::CatalogDiff
     def resource_to_string(resource)
       str = ''
       str << "\t" + resource[:type].downcase << '{"' << resource[:title].to_s << '":' << "\n"
-      params = Hash[(resource[:parameters].sort_by { |k, _v| k })]
+      params = (resource[:parameters].sort_by { |k, _v| k }).to_h
       params.each_pair do |k, v|
         str << "\t     #{k} => "
         indent = ' ' * k.to_s.size

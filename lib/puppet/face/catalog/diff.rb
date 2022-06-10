@@ -152,7 +152,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
             node_summary = Puppet::CatalogDiff::Differ.new(old_catalog, new_catalog).diff(options)
             [node_name, node_summary]
           end
-          nodes = Hash[results]
+          nodes = results.to_h
         else
           thread_count = 1
           mutex = Mutex.new
@@ -209,11 +209,11 @@ Puppet::Face.define(:catalog, '0.0.1') do
 
       with_changes = nodes.select { |_node, summary| summary.is_a?(Hash) && !summary[:node_percentage].zero? }
       most_changed = with_changes.sort_by { |_node, summary| summary[:node_percentage] }.map do |node, summary|
-        Hash[node => summary[:node_percentage]]
+        { node => summary[:node_percentage] }
       end
 
       most_differences = with_changes.sort_by { |_node, summary| summary[:node_differences] }.map do |node, summary|
-        Hash[node => summary[:node_differences]]
+        { node => summary[:node_differences] }
       end
       total_nodes = nodes.size
       nodes[:total_percentage]   = (nodes.map { |_node, summary| summary.is_a?(Hash) && summary[:node_percentage] || nil }.compact.reduce { |acc, elem| acc.to_f + elem } / total_nodes)

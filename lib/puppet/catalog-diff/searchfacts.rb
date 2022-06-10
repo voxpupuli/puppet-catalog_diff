@@ -6,7 +6,7 @@ module Puppet::CatalogDiff
   # SearchFacts returns facts from local data, Puppet API, or PuppetDB
   class SearchFacts
     def initialize(facts)
-      @facts = Hash[facts.split(',').map { |f| f.split('=') }]
+      @facts = facts.split(',').map { |f| f.split('=') }.to_h
     end
 
     def find_nodes(options = {})
@@ -28,7 +28,7 @@ module Puppet::CatalogDiff
       base_query.concat([['=', query_field_catalog_environment, env]]) if env
       real_facts = @facts.compact
       query = base_query.concat(real_facts.map { |k, v| ['=', ['fact', k], v] })
-      classes = Hash[@facts.select { |_k, v| v.nil? }].keys
+      classes = @facts.select { |_k, v| v.nil? }.to_h.keys
       classes.each do |c|
         capit = c.split('::').map(&:capitalize).join('::')
         query.concat(

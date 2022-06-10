@@ -46,10 +46,10 @@ module Puppet::CatalogDiff
         next if new_resource[:parameters] == resource[:parameters]
 
         parameters_in_old[resource[:resource_id]] = \
-          Hash[(resource[:parameters].to_a - new_resource[:parameters].to_a)]
+          (resource[:parameters].to_a - new_resource[:parameters].to_a).to_h
 
         parameters_in_new[resource[:resource_id]] = \
-          Hash[(new_resource[:parameters].to_a - resource[:parameters].to_a)]
+          (new_resource[:parameters].to_a - resource[:parameters].to_a).to_h
 
         if options[:show_resource_diff]
           Puppet.debug("Resource diff: #{resource[:resource_id]}")
