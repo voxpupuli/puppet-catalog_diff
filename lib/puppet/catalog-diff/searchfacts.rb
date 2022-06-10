@@ -37,7 +37,7 @@ module Puppet::CatalogDiff
              ['select-resources',
               ['and',
                ['=', 'type', 'Class'],
-               ['=', 'title', capit]]]]]],
+               ['=', 'title', capit]]]]]]
         )
       end
       query
