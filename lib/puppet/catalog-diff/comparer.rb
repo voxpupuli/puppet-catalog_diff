@@ -56,7 +56,7 @@ module Puppet::CatalogDiff
 
           diff_array = str_diff(
             Puppet::CatalogDiff::Formater.new.resource_to_string(resource),
-            Puppet::CatalogDiff::Formater.new.resource_to_string(new_resource),
+            Puppet::CatalogDiff::Formater.new.resource_to_string(new_resource)
           ).split("\n")
           if diff_array.size >= 3
             string_differences[resource[:resource_id]] = diff_array[3..-1]

@@ -305,15 +305,6 @@ Style/TernaryParentheses:
 
 # Offense count: 2
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, no_comma
-Style/TrailingCommaInArguments:
-  Exclude:
-    - 'lib/puppet/catalog-diff/comparer.rb'
-    - 'lib/puppet/catalog-diff/searchfacts.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
 # Configuration parameters: MinSize, WordRegex.
 # SupportedStyles: percent, brackets
 Style/WordArray:
