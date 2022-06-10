@@ -76,9 +76,7 @@ module Puppet::CatalogDiff
     end
 
     def string_diff(header, resource_id, resource)
-      list = "\t#{resource_id.capitalize}\n" + resource.map do |k|
-        k.to_s
-      end.join("\n")
+      list = "\t#{resource_id.capitalize}\n" + resource.map(&:to_s).join("\n")
       "\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n#{list}"
     end
 

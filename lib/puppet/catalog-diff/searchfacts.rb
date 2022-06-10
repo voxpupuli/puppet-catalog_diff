@@ -30,7 +30,7 @@ module Puppet::CatalogDiff
       query = base_query.concat(real_facts.map { |k, v| ['=', ['fact', k], v] })
       classes = Hash[@facts.select { |_k, v| v.nil? }].keys
       classes.each do |c|
-        capit = c.split('::').map { |n| n.capitalize }.join('::')
+        capit = c.split('::').map(&:capitalize).join('::')
         query = query.concat(
           [['in', 'certname',
             ['extract', 'certname',

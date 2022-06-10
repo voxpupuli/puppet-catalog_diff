@@ -12,7 +12,7 @@ module Puppet::CatalogDiff
 
       if resource[0] =~ %r{class}i
         res << 'Class['
-        res << resource[1].split(%r{::}).map { |r| r.capitalize }.join('::')
+        res << resource[1].split(%r{::}).map(&:capitalize).join('::')
         res << ']'
       else
         res << resource[0].capitalize
