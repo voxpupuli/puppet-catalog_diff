@@ -158,7 +158,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
           thread_count = 1
           mutex = Mutex.new
 
-          Array.new(thread_count) {
+          Array.new(thread_count) do
             Thread.new(nodes, new_catalogs, options) do |nodes, new_catalogs, options|
               while new_catalog = mutex.synchronize { new_catalogs.pop }
                 node_name    = File.basename(new_catalog, File.extname(new_catalog))
@@ -167,7 +167,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
                 mutex.synchronize { nodes[node_name] = node_summary }
               end
             end
-          }.each(&:join)
+          end.each(&:join)
         end
       elsif File.file?(catalog1) && File.file?(catalog2)
         # User passed us two files
@@ -231,10 +231,10 @@ Puppet::Face.define(:catalog, '0.0.1') do
       require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'catalog-diff', 'formater.rb'))
 
       format = Puppet::CatalogDiff::Formater.new
-      nodes.map { |node, summary|
+      nodes.map do |node, summary|
         next if [:total_percentage, :total_nodes, :most_changed, :with_changes, :most_differences, :pull_output, :date, :all_changed_nodes].include?(node)
 
-        format.node_summary_header(node, summary, :node_percentage) + summary.map { |header, value|
+        format.node_summary_header(node, summary, :node_percentage) + summary.map do |header, value|
           next if value.nil?
 
           if value.is_a?(Hash)
@@ -264,8 +264,8 @@ Puppet::Face.define(:catalog, '0.0.1') do
           else
             format.key_pair(header, value)
           end
-        }.delete_if { |x| x.nil? || x == [] }.join("\n")
-      }.join("\n") + "#{format.node_summary_header("#{nodes[:with_changes]} out of #{nodes[:total_nodes]} nodes changed.", nodes, :total_percentage)}\n#{format.list_hash('Nodes with the most changes by percent changed', nodes[:most_changed])}\n\n#{format.list_hash('Nodes with the most changes by differences', nodes[:most_differences], '')}#{format.render_pull(nodes[:pull_output]) if nodes.key?(:pull_output)}"
+        end.delete_if { |x| x.nil? || x == [] }.join("\n")
+      end.join("\n") + "#{format.node_summary_header("#{nodes[:with_changes]} out of #{nodes[:total_nodes]} nodes changed.", nodes, :total_percentage)}\n#{format.list_hash('Nodes with the most changes by percent changed', nodes[:most_changed])}\n\n#{format.list_hash('Nodes with the most changes by differences', nodes[:most_differences], '')}#{format.render_pull(nodes[:pull_output]) if nodes.key?(:pull_output)}"
     end
   end
 end

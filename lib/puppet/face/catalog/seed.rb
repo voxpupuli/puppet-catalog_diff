@@ -64,7 +64,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
       failed_nodes = {}
       mutex = Mutex.new
 
-      Array.new(thread_count) {
+      Array.new(thread_count) do
         Thread.new(nodes, compiled_nodes, options) do |nodes, compiled_nodes, options|
           while node_name = mutex.synchronize { nodes.pop }
             begin
@@ -82,7 +82,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
             end
           end
         end
-      }.each(&:join)
+      end.each(&:join)
       output = {}
       output[:compiled_nodes] = compiled_nodes
       output[:failed_nodes]   = failed_nodes
@@ -91,13 +91,13 @@ Puppet::Face.define(:catalog, '0.0.1') do
     end
 
     when_rendering :console do |output|
-      output.map { |key|
+      output.map do |key|
         next unless key == :compiled_nodes
 
         key.each do |node|
           "Compiled Node: #{node}"
         end
-      }.join("\n") + "#{output[:failed_nodes].join("\n")}\nFailed on #{output[:failed_nodes].size} nodes"
+      end.join("\n") + "#{output[:failed_nodes].join("\n")}\nFailed on #{output[:failed_nodes].size} nodes"
     end
   end
 end
