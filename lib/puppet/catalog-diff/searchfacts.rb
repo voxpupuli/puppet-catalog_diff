@@ -6,7 +6,7 @@ module Puppet::CatalogDiff
   # SearchFacts returns facts from local data, Puppet API, or PuppetDB
   class SearchFacts
     def initialize(facts)
-      @facts = Hash[facts.split(',').map { |f| f.split('=') }]
+      @facts = facts.split(',').map { |f| f.split('=') }.to_h
     end
 
     def find_nodes(options = {})
@@ -15,9 +15,7 @@ module Puppet::CatalogDiff
       Puppet.debug('Using PuppetDB to find active nodes')
       filter_env = options[:filter_old_env] ? old_env : nil
       active_nodes = find_nodes_puppetdb(filter_env, options[:puppetdb])
-      if active_nodes.empty?
-        raise 'No active nodes were returned from your fact search'
-      end
+      raise 'No active nodes were returned from your fact search' if active_nodes.empty?
 
       active_nodes
     end
@@ -28,7 +26,7 @@ module Puppet::CatalogDiff
       base_query.concat([['=', query_field_catalog_environment, env]]) if env
       real_facts = @facts.compact
       query = base_query.concat(real_facts.map { |k, v| ['=', ['fact', k], v] })
-      classes = Hash[@facts.select { |_k, v| v.nil? }].keys
+      classes = @facts.select { |_k, v| v.nil? }.to_h.keys
       classes.each do |c|
         capit = c.split('::').map(&:capitalize).join('::')
         query.concat(
@@ -52,7 +50,7 @@ module Puppet::CatalogDiff
         Puppet.debug("Got PuppetDB version: #{version} from HTTP API.")
       else
         version = '2.3'
-        Puppet::debug("Getting PuppetDB version failed because HTTP API query returned code #{result.code}. Falling back to PuppetDB version #{version}.")
+        Puppet.debug("Getting PuppetDB version failed because HTTP API query returned code #{result.code}. Falling back to PuppetDB version #{version}.")
       end
       version
     end
@@ -67,7 +65,7 @@ module Puppet::CatalogDiff
         result = Puppet.runtime[:http].get(URI("#{puppetdb}/pdb/query/v4/nodes?query=#{json_query}"), headers: headers)
         if result.code >= 400
           puppetdb_version = '2.3'
-          Puppet::debug("Query returned HTTP code #{result.code}. Falling back to older version of API used in PuppetDB version #{puppetdb_version}.")
+          Puppet.debug("Query returned HTTP code #{result.code}. Falling back to older version of API used in PuppetDB version #{puppetdb_version}.")
           query = build_query(env, puppetdb_version)
           json_query = URI.escape(query.to_json)
           result = Puppet.runtime[:http].get(URI("#{puppetdb}/pdb/query/v4/nodes?query=#{json_query}"), headers: headers)

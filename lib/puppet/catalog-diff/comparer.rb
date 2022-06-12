@@ -46,10 +46,10 @@ module Puppet::CatalogDiff
         next if new_resource[:parameters] == resource[:parameters]
 
         parameters_in_old[resource[:resource_id]] = \
-          Hash[(resource[:parameters].to_a - new_resource[:parameters].to_a)]
+          (resource[:parameters].to_a - new_resource[:parameters].to_a).to_h
 
         parameters_in_new[resource[:resource_id]] = \
-          Hash[(new_resource[:parameters].to_a - resource[:parameters].to_a)]
+          (new_resource[:parameters].to_a - resource[:parameters].to_a).to_h
 
         if options[:show_resource_diff]
           Puppet.debug("Resource diff: #{resource[:resource_id]}")
@@ -93,9 +93,7 @@ module Puppet::CatalogDiff
       params.each do |x|
         next unless %i[require before notify subscribe].include?(x[0])
 
-        if x[1].instance_of?(Array)
-          x[1].sort!
-        end
+        x[1].sort! if x[1].instance_of?(Array)
       end
     end
 
@@ -122,7 +120,7 @@ module Puppet::CatalogDiff
 
     def validate_encoding(str)
       unless str.valid_encoding?
-        Puppet::debug("Detected that string used in diff had invalid #{str.encoding} encoding. Replacing invalid characters in diff output.")
+        Puppet.debug("Detected that string used in diff had invalid #{str.encoding} encoding. Replacing invalid characters in diff output.")
         str.encode!('UTF-8', 'UTF-8', invalid: :replace)
       end
       str

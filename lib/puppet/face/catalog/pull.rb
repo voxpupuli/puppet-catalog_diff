@@ -1,5 +1,4 @@
 require 'puppet/face'
-require 'thread'
 require 'digest'
 require 'puppet/util/puppetdb'
 
@@ -147,7 +146,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
       output[:compiled_nodes]       = compiled_nodes.compact
       output[:compiled_nodes_total] = compiled_nodes.compact.size
       output[:total_nodes]          = total_nodes
-      output[:total_percentage]     = (failed_nodes.size.to_f / total_nodes.to_f) * 100
+      output[:total_percentage]     = (failed_nodes.size.to_f / total_nodes) * 100
       problem_files = {}
 
       failed_nodes.each do |node_name, error|
@@ -162,7 +161,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
       end
 
       most_changed = problem_files.sort_by { |_file, nodes| nodes.size }.map do |file, nodes|
-        Hash[file => nodes.size]
+        { file => nodes.size }
       end
 
       output[:failed_to_compile_files] = most_changed.reverse.take(options[:changed_depth].to_i)
@@ -171,7 +170,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
         example_error = file_hash.map do |file_name, _metric|
           example_node = problem_files[file_name].first
           error = failed_nodes[example_node].to_s
-          Hash[error => example_node]
+          { error => example_node }
         end.first
         example_error
       end

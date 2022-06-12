@@ -40,9 +40,7 @@ module Puppet::CatalogDiff
       raise "Error retrieving node object from yaml terminus #{node_name}" unless node
 
       Puppet.debug("Found environment #{node.environment} for node #{node_name}")
-      if node.parameters['clientcert'] != node_name
-        raise "The node retrieved from yaml terminus is a mismatch node returned was (#{node.parameters['clientcert']})"
-      end
+      raise "The node retrieved from yaml terminus is a mismatch node returned was (#{node.parameters['clientcert']})" if node.parameters['clientcert'] != node_name
 
       node.environment
     end
@@ -57,9 +55,7 @@ module Puppet::CatalogDiff
       request_url = URI("#{puppetdb}/pdb/query/v4/catalogs?query=#{json_query}")
       headers = { 'Accept-Content' => 'application/json' }
       ret = Puppet.runtime[:http].get(request_url, headers: headers)
-      unless ret.success?
-        raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}"
-      end
+      raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}" unless ret.success?
 
       begin
         catalog = PSON.parse(ret.body)
@@ -106,9 +102,7 @@ module Puppet::CatalogDiff
               else
                 Puppet.runtime[:http].get(uri, headers: headers)
               end
-        unless ret.success?
-          raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}"
-        end
+        raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}" unless ret.success?
       rescue Exception => e
         raise "Failed to retrieve catalog for #{node_name} from #{server} in environment #{environment}: #{e.message}"
       end
@@ -118,13 +112,9 @@ module Puppet::CatalogDiff
       rescue PSON::ParserError => e
         raise "Error parsing json output of puppet catalog query for #{node_name}: #{e.message}. Content: #{ret.body}"
       end
-      if catalog.key?('issue_kind')
-        raise catalog['message']
-      end
+      raise catalog['message'] if catalog.key?('issue_kind')
 
-      if certless
-        catalog = catalog['catalog']
-      end
+      catalog = catalog['catalog'] if certless
       catalog
     end
 
