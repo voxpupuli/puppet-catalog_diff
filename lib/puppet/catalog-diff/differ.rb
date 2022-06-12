@@ -107,17 +107,17 @@ module Puppet::CatalogDiff
       subtractions = resource_diffs_titles[:titles_only_in_old].size
       changes      = resource_diffs[:new_params].keys.size
 
-      changes_percentage      = (titles[:from].size.zero? && 0 || 100 * (resource_diffs[:new_params].keys.size.to_f / titles[:from].size))
-      additions_percentage    = (titles[:to].size.zero?   && 0 || 100 * (additions.to_f / titles[:to].size))
-      subtractions_percentage = (titles[:from].size.zero? && 0 || 100 * (subtractions.to_f / titles[:from].size))
+      changes_percentage      = ((titles[:from].size.zero? && 0) || (100 * (resource_diffs[:new_params].keys.size.to_f / titles[:from].size)))
+      additions_percentage    = ((titles[:to].size.zero?   && 0) || (100 * (additions.to_f / titles[:to].size)))
+      subtractions_percentage = ((titles[:from].size.zero? && 0) || (100 * (subtractions.to_f / titles[:from].size)))
 
       output[:catalag_percentage_added]   = '%.2f' % additions_percentage
       output[:catalog_percentage_removed] = '%.2f' % subtractions_percentage
       output[:catalog_percentage_changed] = '%.2f' % changes_percentage
-      output[:added_and_removed_resources] = "#{!additions.zero? && "+#{additions}" || 0} / #{!subtractions.zero? && "-#{subtractions}" || 0}"
+      output[:added_and_removed_resources] = "#{(!additions.zero? && "+#{additions}") || 0} / #{(!subtractions.zero? && "-#{subtractions}") || 0}"
 
       divide_by = (changes_percentage.zero? ? 0 : 1) + (additions_percentage.zero? ? 0 : 1) + (subtractions_percentage.zero? ? 0 : 1)
-      output[:node_percentage]       = (divide_by.zero? && 0 || additions_percentage == 100 && 100 || (changes_percentage + additions_percentage + subtractions_percentage) / divide_by).to_f
+      output[:node_percentage]       = ((divide_by.zero? && 0) || (additions_percentage == 100 && 100) || ((changes_percentage + additions_percentage + subtractions_percentage) / divide_by)).to_f
       output[:node_differences]      = (additions.abs.to_i + subtractions.abs.to_i + changes.abs.to_i)
       output
     end
