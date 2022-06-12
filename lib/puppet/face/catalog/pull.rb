@@ -180,7 +180,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
 
       failed_nodes.each do |node_name, error|
         # Extract the filename and the node a key of the same name
-        match = /(\S*(\/\S*\.pp|\.erb))/.match(error.to_s)
+        match = %r{(\S*(/\S*\.pp|\.erb))}.match(error.to_s)
         if match
           (problem_files[match[1]] ||= []) << node_name
         else
