@@ -50,7 +50,7 @@ module Puppet::CatalogDiff
     # creates a string representation of a resource that looks like Puppet code
     def resource_to_string(resource)
       str = ''
-      str << "\t" + resource[:type].downcase << '{"' << resource[:title].to_s << '":' << "\n"
+      str << "\t#{resource[:type].downcase}" << '{"' << resource[:title].to_s << '":' << "\n"
       params = (resource[:parameters].sort_by { |k, _v| k }).to_h
       params.each_pair do |k, v|
         str << "\t     #{k} => "
