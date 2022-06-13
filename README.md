@@ -144,6 +144,13 @@ puppet_authorization::rule { 'catalog-diff certless catalog':
 }
 ```
 
+The certless API has one big, not so obvious, advantage. It can read trusted
+facts from PuppetDB and use them during catalog compilation. Using trusted facts
+in Hiera/Puppet code required using the certless API. From the
+[API docs](https://puppet.com/docs/puppet/7/server/puppet-api/v4/catalog.html#trusted-facts):
+
+> trusted_facts (API field): A hash with a required values key containing a hash of the trusted facts for a node. In a normal agent's catalog request, these would be extracted from the cert, but this endpoint does not require a cert for the node whose catalog is being compiled. If not provided, Puppet will attempt to fetch the trusted facts for the node from PuppetDB or from the provided facts hash.
+
 ## Usage
 
 
