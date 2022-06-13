@@ -314,3 +314,11 @@ It's been verified to work with uploading facts from Puppet Masters running Pupp
 version 3 to Masters running version 5. It uses the [`/puppet/v3/facts/` API](https://puppet.com/docs/puppet/6.17/http_api/http_facts.html)
 which is available in version 3 and >= 5 of Puppet. This API was removed in Puppet 4 but
 added again in 5.
+
+### Further documentation
+
+
+* Raphaël Pinson wrote a [blog series on dev.to](https://dev.to/camptocamp-ops/diffing-puppet-environments-1fno) about using puppet-catalog-diff and GitLab integration
+* Raphaël Pinson also made two talks about it:
+  * https://youtu.be/6LOaHsQDsiI - Automated Puppet Impact Analysis with Puppet Catalog Diff and GitLab CI
+  * https://youtu.be/o8HP_wcxse4 - Puppet Camp Netherlands: Impact Analysis with Puppet Catalog Diff
