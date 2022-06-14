@@ -257,6 +257,15 @@ For node discovery and retrieving old catalogs, you can use
 `--old_puppetdb https://fqdn:8081`. To get new catalogs from a specific
 Puppetdb, use `--new_puppetdb https://fqdn:8081`.
 
+`puppet catalog diff` works with the TLS certificates that the agent also uses.
+You can see the related files by checking `puppet config print | grep ssl`. If
+the old PuppetDB uses certificates from a different CA, you can provide those
+via CLI options Those are:
+
+* `--old_puppetdb_tls_cert=`
+* `--old_puppetdb_tls_key=`
+* `--old_puppetdb_tls_ca=`
+
 ## Limitations
 
 This code only validates the catalogs, it cannot tell you if the behavior of

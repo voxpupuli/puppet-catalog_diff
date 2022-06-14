@@ -7,6 +7,9 @@ Puppet::Face.define(:catalog, '0.0.1') do
     description 'Pull catalogs from duel puppet masters'
     arguments '/tmp/old_catalogs /tmp/new_catalogs'
     puppetdb_url = Puppet::Util::Puppetdb.config.server_urls[0]
+    hostcert = Puppet.settings[:hostcert]
+    hostprivkey = Puppet.settings[:hostprivkey]
+    localcacert = Puppet.settings[:localcacert]
 
     option '--old_server=' do
       required
@@ -51,6 +54,21 @@ Puppet::Face.define(:catalog, '0.0.1') do
       default_to { puppetdb_url }
     end
 
+    option '--old_puppetdb_tls_cert=' do
+      summary "Optional absolute path to a client certificate to authenticate against the old PuppetDB. If not provided, the Puppet Agent default certificate will be used. Defaults to #{hostcert}."
+      default_to { hostcert }
+    end
+
+    option '--old_puppetdb_tls_key=' do
+      summary "Optional absolute path to a TLS private key in pem format. If not provided, the Puppet Agent default key will be used. Defaults to #{hostprivkey}."
+      default_to { hostprivkey }
+    end
+
+    option '--old_puppetdb_tls_ca=' do
+      summary "Optional absolute path to a CA pem file. If not provided, the Puppet Agent CA will be used. Defaults to #{localcacert}."
+      default_to { localcacert }
+    end
+
     option '--new_puppetdb=' do
       summary 'Used to download new catalogs. Defaults to first server in puppetdb.conf'
       default_to { puppetdb_url }
@@ -78,7 +96,12 @@ Puppet::Face.define(:catalog, '0.0.1') do
     when_invoked do |catalog1, catalog2, args, options|
       require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'catalog-diff', 'searchfacts.rb'))
       require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'catalog-diff', 'compilecatalog.rb'))
-      options[:puppetdb] = options[:old_puppetdb]
+      search_options = options
+      search_options[:puppetdb] = search_options[:old_puppetdb]
+      search_options[:puppetdb_tls_cert] = search_options[:old_puppetdb_tls_cert]
+      search_options[:puppetdb_tls_key] = search_options[:old_puppetdb_tls_key]
+      search_options[:puppetdb_tls_ca] = search_options[:old_puppetdb_tls_ca]
+
       nodes = if options[:node_list].nil?
                 Puppet::CatalogDiff::SearchFacts.new(args).find_nodes(options)
               else
@@ -103,7 +126,10 @@ Puppet::Face.define(:catalog, '0.0.1') do
                   master_server: options[:old_server],
                   certless: options[:certless],
                   catalog_from_puppetdb: options[:old_catalog_from_puppetdb],
-                  puppetdb: options[:old_puppetdb]
+                  puppetdb: options[:old_puppetdb],
+                  puppetdb_tls_cert: options[:old_puppetdb_tls_cert],
+                  puppetdb_tls_key: options[:old_puppetdb_tls_key],
+                  puppetdb_tls_ca: options[:old_puppetdb_tls_ca]
                 )
                 new_server = Puppet::Face[:catalog, '0.0.1'].seed(
                   catalog2, node_name,
@@ -125,7 +151,10 @@ Puppet::Face.define(:catalog, '0.0.1') do
                   master_server: options[:old_server],
                   certless: options[:certless],
                   catalog_from_puppetdb: options[:old_catalog_from_puppetdb],
-                  puppetdb: options[:old_puppetdb]
+                  puppetdb: options[:old_puppetdb],
+                  puppetdb_tls_cert: options[:old_puppetdb_tls_cert],
+                  puppetdb_tls_key: options[:old_puppetdb_tls_key],
+                  puppetdb_tls_ca: options[:old_puppetdb_tls_ca]
                 )
               end
               mutex.synchronize { compiled_nodes + old_server[:compiled_nodes] }

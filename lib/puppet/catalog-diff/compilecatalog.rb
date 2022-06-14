@@ -1,5 +1,6 @@
 require 'puppet/network/http_pool'
 require File.expand_path(File.join(File.dirname(__FILE__), 'preprocessor.rb'))
+require File.expand_path(File.join(File.dirname(__FILE__), 'tlsfactory.rb'))
 
 # Puppet::CatalogDiff
 module Puppet::CatalogDiff
@@ -11,10 +12,10 @@ module Puppet::CatalogDiff
 
     attr_reader :node_name
 
-    def initialize(node_name, save_directory, server, certless, catalog_from_puppetdb, puppetdb)
+    def initialize(node_name, save_directory, server, certless, catalog_from_puppetdb, puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
       @node_name = node_name
       catalog = if catalog_from_puppetdb
-                  get_catalog_from_puppetdb(node_name, server, puppetdb)
+                  get_catalog_from_puppetdb(node_name, server, puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
                 else
                   catalog = compile_catalog(node_name, server, certless)
                   clean_sensitive_parameters!(catalog)
@@ -45,7 +46,7 @@ module Puppet::CatalogDiff
       node.environment
     end
 
-    def get_catalog_from_puppetdb(node_name, server, puppetdb)
+    def get_catalog_from_puppetdb(node_name, server, puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
       Puppet.debug("Getting PuppetDB catalog for #{node_name} from #{puppetdb}")
       query = ['and', ['=', 'certname', node_name.to_s]]
       _server, environment = server.split('/')
@@ -54,7 +55,8 @@ module Puppet::CatalogDiff
       json_query = URI.encode_www_form_component(query.to_json)
       request_url = URI("#{puppetdb}/pdb/query/v4/catalogs?query=#{json_query}")
       headers = { 'Accept-Content' => 'application/json' }
-      ret = Puppet.runtime[:http].get(request_url, headers: headers)
+      ssl_context = Puppet::CatalogDiff::Tlsfactory.ssl_context(puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
+      ret = Puppet.runtime[:http].get(request_url, headers: headers, options: { ssl_context: ssl_context })
       raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}" unless ret.success?
 
       begin
