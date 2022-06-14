@@ -43,6 +43,21 @@ Puppet::Face.define(:catalog, '0.0.1') do
       default_to { localcacert }
     end
 
+    option '--puppetserver_tls_cert=' do
+      summary "Optional absolute path to a client certificate to authenticate against the old Puppetserver. If not provided, the Puppet Agent default certificate will be used. Defaults to #{hostcert}."
+      default_to { hostcert }
+    end
+
+    option '--puppetserver_tls_key=' do
+      summary "Optional absolute path to a TLS private key in pem format. If not provided, the Puppet Agent default key will be used. Defaults to #{hostprivkey}."
+      default_to { hostprivkey }
+    end
+
+    option '--puppetserver_tls_ca=' do
+      summary "Optional absolute path to a CA pem file. If not provided, the Puppet Agent CA will be used. Defaults to #{localcacert}."
+      default_to { localcacert }
+    end
+
     description <<-'EOT'
       This action is used to seed a series of catalogs to then be compared with diff
     EOT
@@ -91,7 +106,10 @@ Puppet::Face.define(:catalog, '0.0.1') do
                 options[:puppetdb],
                 options[:puppetdb_tls_cert],
                 options[:puppetdb_tls_key],
-                options[:puppetdb_tls_ca]
+                options[:puppetdb_tls_ca],
+                options[:puppetserver_tls_cert],
+                options[:puppetserver_tls_key],
+                options[:puppetserver_tls_ca]
               )
               mutex.synchronize { compiled_nodes << node_name }
             rescue Exception => e
