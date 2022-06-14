@@ -1,6 +1,8 @@
 require 'puppet/network/http_pool'
 require 'uri'
 require 'json'
+require File.expand_path(File.join(File.dirname(__FILE__), 'tlsfactory.rb'))
+
 # Puppet::CatalogDiff
 module Puppet::CatalogDiff
   # SearchFacts returns facts from local data, Puppet API, or PuppetDB
@@ -41,19 +43,9 @@ module Puppet::CatalogDiff
       query
     end
 
-    def build_ssl_context(puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
-      # Load certificates to make a connection to a possible foreign PuppetDB
-      x509 = Puppet::X509::CertProvider.new
-      cacerts = x509.load_cacerts_from_pem(File.read(puppetdb_tls_ca, encoding: Encoding::UTF_8))
-      client_cert = x509.load_client_cert_from_pem(File.read(puppetdb_tls_cert, encoding: Encoding::UTF_8))
-      private_key = x509.load_private_key_from_pem(File.read(puppetdb_tls_key, encoding: Encoding::UTF_8))
-      prov = Puppet::SSL::SSLProvider.new
-      prov.create_context(revocation: false, cacerts: cacerts, private_key: private_key, client_cert: client_cert, include_system_store: true, crls: [])
-    end
-
     def get_puppetdb_version(server, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
       headers = { 'Accept' => 'application/json' }
-      ssl_context = build_ssl_context(puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
+      ssl_context = Puppet::CatalogDiff::Tlsfactory.ssl_context(puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
       Puppet.debug("connecting to #{server}")
       uri = URI("#{server}/pdb/meta/v1/version")
       result = Puppet.runtime[:http].get(uri, headers: headers, options: { ssl_context: ssl_context })
@@ -75,7 +67,7 @@ module Puppet::CatalogDiff
       headers = { 'Accept' => 'application/json' }
       Puppet.debug("Querying #{puppetdb} for environment #{env}")
       begin
-        ssl_context = build_ssl_context(puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
+        ssl_context = Puppet::CatalogDiff::Tlsfactory.ssl_context(puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
         uri = URI("#{puppetdb}/pdb/query/v4/nodes?query=#{json_query}")
         result = Puppet.runtime[:http].get(uri, headers: headers, options: { ssl_context: ssl_context })
         if result.code >= 400
