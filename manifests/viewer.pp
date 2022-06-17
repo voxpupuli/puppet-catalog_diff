@@ -1,3 +1,5 @@
+# A class to configure the diff viewer webservice. For full details, see
+# https://github.com/camptocamp/puppet-catalog-diff-viewer
 class catalog_diff::viewer (
   String  $remote    = 'https://github.com/camptocamp/puppet-catalog-diff-viewer.git',
   String  $password  = 'puppet',
@@ -35,7 +37,7 @@ class catalog_diff::viewer (
 
   htpasswd { 'puppet':
     username    => 'puppet',
-    cryptpasswd => ht_crypt($password, $facts['dmi']['product']['uuid']),
+    cryptpasswd => htpasswd::ht_crypt($password, $facts['dmi']['product']['uuid']),
     target      => '/var/www/.htpasswd',
   }
 

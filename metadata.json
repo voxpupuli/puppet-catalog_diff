@@ -8,7 +8,26 @@
   "project_page": "https://github.com/voxpupuli/puppet-catalog_diff",
   "issues_url": "https://github.com/voxpupuli/puppet-catalog_diff/issues",
   "dependencies": [
-
+    {
+      "name": "puppetlabs/apache",
+      "version_requirement": ">=6.0.0 < 8.0.0"
+    },
+    {
+      "name": "citrin/htpasswd",
+      "version_requirement": ">=1.0.0 < 2.0.0"
+    },
+    {
+      "name": "puppetlabs/vcsrepo",
+      "version_requirement": ">=4.0.0 < 6.0.0"
+    },
+    {
+      "name": "puppetlabs/git",
+      "version_requirement": ">=0.5.0 < 1.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">=7.0.0 < 8.0.0"
+    }
   ],
   "operatingsystem_support": [
     {
