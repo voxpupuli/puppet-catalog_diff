@@ -50,7 +50,7 @@ module Puppet::CatalogDiff
     # creates a string representation of a resource that looks like Puppet code
     def resource_to_string(resource)
       str = ''
-      str << "\t" + resource[:type].downcase << '{"' << resource[:title].to_s << '":' << "\n"
+      str << "\t#{resource[:type].downcase}" << '{"' << resource[:title].to_s << '":' << "\n"
       params = (resource[:parameters].sort_by { |k, _v| k }).to_h
       params.each_pair do |k, v|
         str << "\t     #{k} => "
@@ -104,8 +104,8 @@ module Puppet::CatalogDiff
       list = value.map do |hash|
         number += 1
         hash.map do |key, val|
-          header_spacing = ' ' * (79 - ("#{number}. #{key}".length + ((mark == '%' && '%.2f' % val || val)).to_s.to_s.length))
-          "#{number}. #{key}#{header_spacing}#{(mark == '%' && '%.2f' % val || val)}#{mark}"
+          header_spacing = ' ' * (79 - ("#{number}. #{key}".length + (((mark == '%' && ('%.2f' % val)) || val)).to_s.to_s.length))
+          "#{number}. #{key}#{header_spacing}#{(mark == '%' && ('%.2f' % val)) || val}#{mark}"
         end
       end.join("\n")
       "\033[1m#{header.to_s.tr('_', ' ').capitalize}\033[0m:\n#{list}"

@@ -93,7 +93,7 @@ describe Puppet::CatalogDiff::Comparer do
 
       ruby_default_replacement_string_for_invalid_characters = '�'
       expect(diffs[:string_diffs]['file.foo'][3]).to \
-        eq("-\t     content => \"" + ruby_default_replacement_string_for_invalid_characters + '"')
+        eq("-\t     content => \"#{ruby_default_replacement_string_for_invalid_characters}\"")
     end
 
     it 'returns a diff without path parameter' do
@@ -114,8 +114,8 @@ describe Puppet::CatalogDiff::Comparer do
   describe 'do_str_diff' do
     it 'diffs two strings' do
       diff = do_str_diff('abc', 'abd')
-      expect(diff).to match(/^-abc$/)
-      expect(diff).to match(/^\+abd$/)
+      expect(diff).to match(%r{^-abc$})
+      expect(diff).to match(%r{^\+abd$})
     end
   end
 
@@ -123,16 +123,16 @@ describe Puppet::CatalogDiff::Comparer do
     context 'when passing strings' do
       it 'diffs two strings' do
         diff = str_diff('abc', 'abd')
-        expect(diff).to match(/^-abc$/)
-        expect(diff).to match(/^\+abd$/)
+        expect(diff).to match(%r{^-abc$})
+        expect(diff).to match(%r{^\+abd$})
       end
     end
 
     context 'when passing hashes' do
       it 'diffs content params' do
         diff = str_diff(res1[0][:parameters], res2[0][:parameters])
-        expect(diff).to match(/^-foo content$/)
-        expect(diff).to match(/^\+foo content 2$/)
+        expect(diff).to match(%r{^-foo content$})
+        expect(diff).to match(%r{^\+foo content 2$})
       end
     end
   end
