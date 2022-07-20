@@ -27,6 +27,7 @@
 1. [Contributors](#contributors)
 1. [See Also](#see-also)
     1. [Upload facts to PuppetDB](#upload-facts-to-puppetdb)
+    1. [Modern fact submission](#modern-fact-submission)
 
 
 ## Overview
@@ -336,8 +337,134 @@ version 3 to Masters running version 5. It uses the [`/puppet/v3/facts/` API](ht
 which is available in version 3 and >= 5 of Puppet. This API was removed in Puppet 4 but
 added again in 5.
 
-### Further documentation
+### Modern fact submission
 
+Nowadays it's possible to use `puppet facts upload --server $new_server` to
+submit facts to a new server. This however requires that the new puppetserver
+and the old one share one certificate authority. You can easily run this once
+via bolt to get all facts to a new puppetserver.
+
+### complex fact submission
+
+To every problem an overengineered solution exists! Let's assume this:
+You have an existing Puppet environment. You setup a new Puppetserver,
+with a newer Puppet version and a new CA. You have a third box with
+catalog_diff, that has certificates to access the old and new Puppetserver. Now
+for catalog_diff to work, we need to get the facts from the old environment to
+the new one. There are three little scripts that you can use to:
+
+* download facts from old PuppetDB
+* Convert the format
+* Submit them to the new Puppetserver
+
+It's best to run them on the catalog_diff box, since it already has certificates
+that allow it to access all required APIs:
+
+
+```bash
+#!/bin/bash
+
+
+#differ_certs/
+#├── catalog-diff_dev
+#│   ├── ca
+#│   │   └── ca.pem
+#│   ├── cert
+#│   │   └── catalog-diff.pem
+#│   └── private
+#│       └── catalog-diff.pem
+#├── catalog-diff_prod
+#│   ├── ca
+#│   │   └── ca.pem
+#│   ├── cert
+#│   │   └── catalog-diff.pem
+#│   └── private
+#│       └── catalog-diff.pem
+
+
+certs_dir="${HOME}/differ_certs"
+certs_dev="${certs_dir}/catalog-diff_dev"
+certs_prod="${certs_dir}/catalog-diff_prod"
+cert='catalog-diff.pem'
+puppetdb_dev=puppet-dev.local
+puppetdb_prod=puppet-prod.local
+clientcert_dev="${certs_dev}/cert/${cert}"
+clientcert_prod="${certs_prod}/cert/${cert}"
+clientkey_dev="${certs_dev}/private/${cert}"
+clientkey_prod="${certs_prod}/private/${cert}"
+cacert_dev="${certs_dev}/ca/ca.pem"
+cacert_prod="${certs_prod}/ca/ca.pem"
+
+function prod_facts() {
+  curl --request GET \
+    --url "https://${puppetdb_prod}:8081/pdb/query/v4/factsets" \
+    --cert "${clientcert_prod}" \
+    --cacert "${cacert_prod}" \
+    --key "${clientkey_prod}" \
+    --silent \
+    | jq -cr '.[] | .certname, .' | awk 'NR%2{f="factsets/"$0".json";next} {print >f;close(f)}'
+}
+
+function dev_facts() {
+  curl --request GET \
+    --url "https://${puppetdb_dev}:8081/pdb/query/v4/factsets" \
+    --cert "${clientcert_dev}" \
+    --cacert "${cacert_dev}" \
+    --key "${clientkey_dev}" \
+    --silent \
+    | jq -cr '.[] | .certname, .' | awk 'NR%2{f="factsets/"$0".json";next} {print >f;close(f)}'
+}
+
+function facts() {
+  dev_facts
+  prod_facts
+}
+facts
+```
+
+```ruby
+#!/opt/puppetlabs/puppet/bin/ruby
+
+require 'json'
+require 'date'
+
+Dir[Dir.home + "/factsets/*.json"].each do |file|
+  filename = File.basename(file)
+  puts "processing #{filename}"
+  facts = JSON.parse(File.read(file))
+  real_facts = { }
+  real_facts['values'] = facts['facts']['data'].map{|facthash| {facthash['name'] => facthash['value']}}.reduce({}, :merge)
+  real_facts['name'] = facts['certname']
+  real_facts['timestamp'] = facts['timestamp']
+  # expiration is usually timestamp + runintervall. We use 30min here
+  real_facts['expiration'] = DateTime.parse(facts['timestamp']) + Rational(30 * 60, 86400)
+  File.open(Dir.home + "/facts/#{filename}","w") do |f| f.write("#{JSON.pretty_generate(real_facts)}\n") end
+end
+```
+
+```bash
+#!/bin/bash
+
+hostcert="$(puppet config print hostcert)"
+hostprivkey="$(puppet config print hostprivkey)"
+localcacert="$(puppet config print localcacert)"
+server="$(puppet config print server)"
+for file in facts/*json; do
+  filename="$(basename $file)"
+  certname="$(basename $filename '.json')"
+  environment="$(jq --raw-output .environment factsets/${filename})"
+  curl --include \
+    --request PUT \
+    --cert "${hostcert}" \
+    --key "${hostprivkey}" \
+    --cacert "${localcacert}" \
+    --data @"${file}" \
+    --url "https://${server}:8140/puppet/v3/facts/${certname}?environment=${environment}" \
+    --header 'Content-Type: application/json'
+done
+```
+
+### Further documentation
 
 * Raphaël Pinson wrote a [blog series on dev.to](https://dev.to/camptocamp-ops/diffing-puppet-environments-1fno) about using puppet-catalog-diff and GitLab integration
 * Raphaël Pinson also made two talks about it:
