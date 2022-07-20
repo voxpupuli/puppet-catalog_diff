@@ -1,13 +1,17 @@
 # Puppet Catalog Diff
 
-[![Puppet Forge Version](http://img.shields.io/puppetforge/v/camptocamp/catalog_diff.svg)](https://forge.puppetlabs.com/camptocamp/catalog_diff)
-[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/camptocamp/catalog_diff.svg)](https://forge.puppetlabs.com/camptocamp/catalog_diff)
-[![Build Status](https://img.shields.io/travis/camptocamp/puppet-catalog-diff/master.svg)](https://travis-ci.org/camptocamp/puppet-catalog-diff)
-[![Coverage Status](https://img.shields.io/coveralls/camptocamp/puppet-catalog-diff.svg)](https://coveralls.io/r/camptocamp/puppet-catalog-diff)
+[![Build Status](https://github.com/voxpupuli/puppet-catalog_diff/workflows/CI/badge.svg)](https://github.com/voxpupuli/puppet-catalog_diff/actions?query=workflow%3ACI)
+[![Release](https://github.com/voxpupuli/puppet-catalog_diff/actions/workflows/release.yml/badge.svg)](https://github.com/voxpupuli/puppet-catalog_diff/actions/workflows/release.yml)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/catalog_diff.svg)](https://forge.puppetlabs.com/puppet/catalog_diff)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/catalog_diff.svg)](https://forge.puppetlabs.com/puppet/catalog_diff)
+[![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/catalog_diff.svg)](https://forge.puppetlabs.com/puppet/catalog_diff)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/catalog_diff.svg)](https://forge.puppetlabs.com/puppet/catalog_diff)
+[![puppetmodule.info docs](http://www.puppetmodule.info/images/badge.png)](http://www.puppetmodule.info/m/puppet-catalog-diff)
+[![Apache-2 License](https://img.shields.io/github/license/voxpupuli/puppet-catalog_diff.svg)](LICENSE)
 [![By Camptocamp](https://img.shields.io/badge/by-camptocamp-fb7047.svg)](http://www.camptocamp.com)
 
 
-![Catalog Diff](https://raw.githubusercontent.com/camptocamp/puppet-catalog-diff/master/catalog-diff.png)
+![Catalog Diff](https://raw.githubusercontent.com/voxpupuli/puppet-catalog_diff/master/catalog-diff.png)
 
 
 #### Table of Contents
@@ -303,7 +307,7 @@ Raphaël Pinson <raphael.pinson@camptocamp.com> / @raphink
 
 ## Contributors
 
-The list of contributors can be found at: [https://github.com/camptocamp/puppet-catalog-diff/graphs/contributors](https://github.com/camptocamp/puppet-catalog-diff/graphs/contributors).
+The list of contributors can be found at: [https://github.com/voxpupuli/puppet-catalog_diff/graphs/contributors](https://github.com/voxpupuli/puppet-catalog_diff/graphs/contributors).
 
 
 ## See also
