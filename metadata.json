@@ -1,12 +1,12 @@
 {
-  "name": "camptocamp-catalog_diff",
-  "version": "2.3.0",
-  "author": "camptocamp",
+  "name": "puppet-catalog_diff",
+  "version": "3.0.0",
+  "author": "Vox Pupuli",
   "summary": "Compares two catalogs and shows the differences",
   "license": "Apache-2.0",
-  "source": "https://github.com/camptocamp/puppet-catalog-diff",
-  "project_page": "https://github.com/camptocamp/puppet-catalog-diff",
-  "issues_url": "https://github.com/camptocamp/puppet-catalog-diff/issues",
+  "source": "https://github.com/voxpupupli/puppet-catalog_diff",
+  "project_page": "https://github.com/voxpupuli/puppet-catalog_diff",
+  "issues_url": "https://github.com/voxpupuli/puppet-catalog_diff/issues",
   "dependencies": [
 
   ],
@@ -60,8 +60,5 @@
       "name": "puppet",
       "version_requirement": ">= 6.11.0 < 8.0.0"
     }
-  ],
-  "pdk-version": "1.17.0",
-  "template-url": "https://github.com/puppetlabs/pdk-templates.git#master",
-  "template-ref": "heads/master-0-ga58fd92"
+  ]
 }
