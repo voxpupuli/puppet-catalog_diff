@@ -12,12 +12,12 @@ module Puppet::CatalogDiff
 
     attr_reader :node_name
 
-    def initialize(node_name, save_directory, server, certless, catalog_from_puppetdb, puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
+    def initialize(node_name, save_directory, server, certless, catalog_from_puppetdb, puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca, puppetserver_tls_cert, puppetserver_tls_key, puppetserver_tls_ca)
       @node_name = node_name
       catalog = if catalog_from_puppetdb
                   get_catalog_from_puppetdb(node_name, server, puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
                 else
-                  catalog = compile_catalog(node_name, server, certless)
+                  catalog = compile_catalog(node_name, server, certless, puppetserver_tls_cert, puppetserver_tls_key, puppetserver_tls_ca)
                   clean_sensitive_parameters!(catalog)
                   clean_nested_sensitive_parameters!(catalog)
                   catalog
@@ -68,7 +68,7 @@ module Puppet::CatalogDiff
       convert_pdb(catalog)
     end
 
-    def compile_catalog(node_name, server, certless)
+    def compile_catalog(node_name, server, certless, tls_cert, tls_key, tls_ca)
       Puppet.debug("Compiling catalog for #{node_name}")
       server, environment = server.split('/')
       environment ||= lookup_environment(node_name)
@@ -97,14 +97,14 @@ module Puppet::CatalogDiff
       end
 
       uri = URI("https://#{server}:#{port}#{endpoint}")
-      Puppet.debug("Connecting to server: #{uri}")
+      ssl_context = Puppet::CatalogDiff::Tlsfactory.ssl_context(tls_cert, tls_key, tls_ca)
       begin
         ret = if certless
-                Puppet.runtime[:http].post(uri, body.to_json, headers: headers)
+                Puppet.runtime[:http].post(uri, body.to_json, headers: headers, options: { ssl_context: ssl_context })
               else
-                Puppet.runtime[:http].get(uri, headers: headers)
+                Puppet.runtime[:http].get(uri, headers: headers, options: { ssl_context: ssl_context })
               end
-        raise "HTTP request to PuppetDB failed with: HTTP #{ret.code} - #{ret.reason}" unless ret.success?
+        raise "HTTP request to Puppetserver #{server} failed with: HTTP #{ret.code} - #{ret.reason}" unless ret.success?
       rescue Exception => e
         raise "Failed to retrieve catalog for #{node_name} from #{server} in environment #{environment}: #{e.message}"
       end

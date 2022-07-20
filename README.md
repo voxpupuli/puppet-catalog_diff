@@ -266,6 +266,18 @@ via CLI options Those are:
 * `--old_puppetdb_tls_key=`
 * `--old_puppetdb_tls_ca=`
 
+### Non-default Puppetserver
+
+`puppet catalog diff` can request an old catalog from a Puppetserver. The
+Puppetserver will compile a new catalog. By default, catalog-diff will use the
+Agent default certificates to connect to the old Puppserver (see the section
+above for details). You can provide custom Client TLS certificate/private key
+and a CA file:
+
+* `--old_puppetserver_tls_cert=`
+* `--old_puppetserver_tls_key=`
+* `--old_puppetserver_tls_ca=`
+
 ## Limitations
 
 This code only validates the catalogs, it cannot tell you if the behavior of
