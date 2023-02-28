@@ -237,13 +237,6 @@ Puppet::Face.define(:catalog, '0.0.1') do
       end
       raise 'No nodes were matched' if nodes.size.zero?
 
-      if options[:output_report]
-        Puppet.notice("Writing report to disk: #{options[:output_report]}")
-        File.open(options[:output_report], 'w') do |f|
-          f.write(nodes.to_json)
-        end
-      end
-
       with_changes = nodes.select { |_node, summary| summary.is_a?(Hash) && !summary[:node_percentage].zero? }
       most_changed = with_changes.sort_by { |_node, summary| summary[:node_percentage] }.map do |node, summary|
         { node => summary[:node_percentage] }
@@ -260,6 +253,14 @@ Puppet::Face.define(:catalog, '0.0.1') do
       nodes[:total_nodes]        = total_nodes
       nodes[:date]               = Time.new.iso8601
       nodes[:all_changed_nodes]  = with_changes.keys
+
+      if options[:output_report]
+        Puppet.notice("Writing report to disk: #{options[:output_report]}")
+        File.open(options[:output_report], 'w') do |f|
+          f.write(nodes.to_json)
+        end
+      end
+
       nodes
     end
 
