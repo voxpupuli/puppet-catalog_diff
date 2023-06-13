@@ -163,7 +163,7 @@ Example:
 
 
 ```shell
-$ puppet module install camptocamp-catalog_diff
+$ puppet module install puppet-catalog_diff
 $ puppet catalog diff \
      puppet5.example.com:8140/production puppet6.example.com:8140/production \
      --use_puppetdb \
