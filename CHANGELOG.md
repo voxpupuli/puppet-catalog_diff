@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.0.0](https://github.com/voxpupuli/puppet-catalog_diff/tree/v4.0.0) (2023-06-21)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v3.0.0...v4.0.0)
+
+**Breaking changes:**
+
+- Drop Puppet 6 support [\#98](https://github.com/voxpupuli/puppet-catalog_diff/pull/98) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add puppet 8 support [\#97](https://github.com/voxpupuli/puppet-catalog_diff/pull/97) ([bastelfreak](https://github.com/bastelfreak))
+
+**Merged pull requests:**
+
+- switch from camptocamp to voxpupuli module [\#96](https://github.com/voxpupuli/puppet-catalog_diff/pull/96) ([tuxmea](https://github.com/tuxmea))
+
 ## [v3.0.0](https://github.com/voxpupuli/puppet-catalog_diff/tree/v3.0.0) (2022-07-20)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v2.3.0...v3.0.0)
@@ -54,7 +70,7 @@ These should not affect the functionality of the module.
 - Cleanup old code [\#67](https://github.com/voxpupuli/puppet-catalog_diff/pull/67) ([bastelfreak](https://github.com/bastelfreak))
 - comparer: cleanup trailing whitespace [\#64](https://github.com/voxpupuli/puppet-catalog_diff/pull/64) ([bastelfreak](https://github.com/bastelfreak))
 - auth.conf: Document how to update it with Puppet [\#63](https://github.com/voxpupuli/puppet-catalog_diff/pull/63) ([bastelfreak](https://github.com/bastelfreak))
-- Adding --node\_list option [\#55](https://github.com/voxpupuli/puppet-catalog_diff/pull/55) ([as0bu](https://github.com/as0bu))
+- Adding --node\_list option [\#55](https://github.com/voxpupuli/puppet-catalog_diff/pull/55) ([serialh0bbyist](https://github.com/serialh0bbyist))
 - Make --output\_report work when diffing two catalog files or directories. [\#50](https://github.com/voxpupuli/puppet-catalog_diff/pull/50) ([natemccurdy](https://github.com/natemccurdy))
 - Prevent 'false' from showing up in the console report [\#49](https://github.com/voxpupuli/puppet-catalog_diff/pull/49) ([natemccurdy](https://github.com/natemccurdy))
 - README.md: fix installation command [\#48](https://github.com/voxpupuli/puppet-catalog_diff/pull/48) ([aerickson](https://github.com/aerickson))
