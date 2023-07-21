@@ -205,7 +205,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
         nodes[node_name] = Puppet::CatalogDiff::Differ.new(catalog1, catalog2).diff(options)
 
       else
-        # User passed use two hostnames
+        # User passed us two hostnames
         old_catalogs = Dir.mktmpdir("#{catalog1.tr('/', '_')}-")
         new_catalogs = Dir.mktmpdir("#{catalog2.tr('/', '_')}-")
         pull_output = Puppet::Face[:catalog, '0.0.1'].pull(
