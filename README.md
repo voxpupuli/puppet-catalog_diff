@@ -166,7 +166,6 @@ Example:
 $ puppet module install puppet-catalog_diff
 $ puppet catalog diff \
      puppet5.example.com:8140/production puppet6.example.com:8140/production \
-     --use_puppetdb \
      --filter_old_env \
      --old_catalog_from_puppetdb \
      --certless \
