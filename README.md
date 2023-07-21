@@ -164,8 +164,9 @@ in Hiera/Puppet code required using the certless API. From the
 ## Usage
 
 
-Example:
-
+Example: diff catalogs for `node1.example.com` & `node2.example.com` between
+puppetserver `puppet5.example.com`, `puppet6.example.com`. The old catalog will
+be fetched from PuppetDB, the new one will be compiled:
 
 ```shell
 $ puppet module install puppet-catalog_diff
@@ -185,9 +186,26 @@ $ puppet catalog diff \
      --debug \
      \ #--fact_search kernel='Darwin' \
      --threads 50 \
-     \ #--node_list=node1.example.come,node2.example.com
+     \ #--node_list=node1.example.com,node2.example.com
 ```
 
+Example: Compare to local catalogs for `node1.example.com` (we recommend absolute paths):
+
+```shell
+$ puppet catalog diff /foo/old/node1.example.com.json /foo/new/node1.example.com.json
+```
+
+You can generate them on an agent in a serverless setup:
+
+```shell
+puppet catalog compile --render-as json
+```
+
+As an alternative an agent can also download its catalog and store it locally:
+
+```shell
+puppet catalog download
+```
 
 ### Multi threaded compile requests
 
