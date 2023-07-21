@@ -74,12 +74,10 @@ able to compile catalogs on the new Master. This is useful when upgrading Puppet
 
 To upload facts to PuppetDB on a Master see the [Upload facts](#upload-facts-to-puppetdb) script.
 
-
 ## Setup
 
 
 ### Set up node discovery
-
 
 Node discovery requires an access to the PuppetDB. You'll need either:
 
@@ -87,9 +85,17 @@ Node discovery requires an access to the PuppetDB. You'll need either:
 * generate a set key and certificate signed by the Puppet CA to access the
   PuppetDB
 
+PuppetDB has an (optional) [allowlist](https://www.puppet.com/docs/puppetdb/7/configure.html#certificate-allowlist)
+for certificates that are allowed to connect to the database. It's located at
+`/etc/puppetlabs/puppetdb/certificate-allowlist`. in Puppet Enterprise you can
+configure it like this to allow a specific certificate:
+
+```yaml
+puppet_enterprise::profile::puppetdb::allowlisted_certnames:
+  - catalog-diff
+```
 
 ### Set up auth.conf
-
 
 Once you have set up the discovery, you need to allow access to the "diff" node to
 compile the catalogs for all nodes on both your old and new masters.
@@ -101,7 +107,6 @@ In your confdir modify auth.conf to allow access to `/catalog`.
 If there is an existing reference i.e. the $1 back reference for machines to
 compile their own catalog then simply add another line with the certificate
 name of the diff machine. As mentioned this can be the new master as required.
-
 
 E.g. if you're using Puppet 5, you should have something like:
 
