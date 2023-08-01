@@ -4,7 +4,19 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v4.0.0](https://github.com/voxpupuli/puppet-catalog_diff/tree/v4.0.0) (2023-06-21)
+## [v4.0.1](https://github.com/voxpupuli/puppet-catalog_diff/tree/v4.0.1) (2023-08-01)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v4.0.0...v4.0.1)
+
+**Fixed bugs:**
+
+- Include node stats in output report [\#94](https://github.com/voxpupuli/puppet-catalog_diff/pull/94) ([cyberkov](https://github.com/cyberkov))
+
+**Merged pull requests:**
+
+- Enhance README.md with more examples & fix typos [\#100](https://github.com/voxpupuli/puppet-catalog_diff/pull/100) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v4.0.0](https://github.com/voxpupuli/puppet-catalog_diff/tree/v4.0.0) (2023-06-22)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v3.0.0...v4.0.0)
 
