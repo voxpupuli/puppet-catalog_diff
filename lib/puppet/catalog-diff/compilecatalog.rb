@@ -163,6 +163,7 @@ module Puppet::CatalogDiff
     end
 
     def save_catalog_to_disk(save_directory, node_name, catalog, extention)
+      Puppet.debug("Saving catalog for #{node_name} to: #{save_directory}/#{node_name}.#{extention}")
       File.open("#{save_directory}/#{node_name}.#{extention}", 'w') do |f|
         f.write(catalog)
       end
