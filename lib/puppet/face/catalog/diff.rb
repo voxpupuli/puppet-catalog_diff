@@ -257,7 +257,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
       if options[:output_report]
         Puppet.notice("Writing report to disk: #{options[:output_report]}")
         File.open(options[:output_report], 'w') do |f|
-          f.write(nodes.to_json)
+          f.write(JSON.pretty_generate(nodes))
         end
       end
 
