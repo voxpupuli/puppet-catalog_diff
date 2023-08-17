@@ -1,6 +1,5 @@
 require 'yaml'
 require 'facter'
-require 'pp'
 require 'fileutils'
 require 'digest/md5'
 require 'tempfile'
