@@ -164,9 +164,7 @@ module Puppet::CatalogDiff
 
     def save_catalog_to_disk(save_directory, node_name, catalog, extention)
       Puppet.debug("Saving catalog for #{node_name} to: #{save_directory}/#{node_name}.#{extention}")
-      File.open("#{save_directory}/#{node_name}.#{extention}", 'w') do |f|
-        f.write(catalog)
-      end
+      File.write("#{save_directory}/#{node_name}.#{extention}", catalog)
     rescue Exception => e
       raise "Failed to save catalog for #{node_name} in #{save_directory}: #{e.message}"
     end

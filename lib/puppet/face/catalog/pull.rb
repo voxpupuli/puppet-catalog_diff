@@ -93,16 +93,16 @@ Puppet::Face.define(:catalog, '0.0.1') do
       summary 'A manual list of nodes to run catalog diffs against'
     end
 
-    description <<-'EOT'
+    description <<-EOT
       This action is used to seed a series of catalogs from two servers
     EOT
-    notes <<-'NOTES'
+    notes <<-NOTES
       This will store files in pson format with the in the save directory. i.e.
       <path/to/seed/directory>/<node_name>.pson . This is currently the only format
       that is supported.
 
     NOTES
-    examples <<-'EOT'
+    examples <<-EOT
       Dump host catalogs:
 
       $ puppet catalog pull /tmp/old_catalogs /tmp/new_catalogs kernel=Linux --old_server puppet2.puppetlabs.vm --new_server puppet3.puppetlabs.vm

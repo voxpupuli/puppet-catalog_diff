@@ -58,16 +58,16 @@ Puppet::Face.define(:catalog, '0.0.1') do
       default_to { localcacert }
     end
 
-    description <<-'EOT'
+    description <<-EOT
       This action is used to seed a series of catalogs to then be compared with diff
     EOT
-    notes <<-'NOTES'
+    notes <<-NOTES
       This will store files in pson format with the in the save directory. i.e.
       <path/to/seed/directory>/<node_name>.pson . This is currently the only format
       that is supported. You must add --mode master currently on 2.7
 
     NOTES
-    examples <<-'EOT'
+    examples <<-EOT
       Dump host catalogs:
 
       $ puppet catalog seed /tmp/old_catalogs 'virtual=virtualbox'

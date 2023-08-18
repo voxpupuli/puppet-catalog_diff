@@ -123,11 +123,11 @@ Puppet::Face.define(:catalog, '0.0.1') do
       default_to { puppetdb_url }
     end
 
-    description <<-'EOT'
+    description <<-EOT
       Prints the differences between catalogs compiled by different puppet master to help
       during migrating to a new Puppet version.
     EOT
-    notes <<-'NOTES'
+    notes <<-NOTES
       The diff tool recognizes catalogs in yaml, marshall, or pson format.
 
       Validation Process:
@@ -152,7 +152,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
       recommended, this is just one tool to take away some of the uncertainty
 
     NOTES
-    examples <<-'EOT'
+    examples <<-EOT
       Compare host catalogs:
 
       $ puppet catalog diff host-2.6.yaml host-3.0.pson
@@ -256,9 +256,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
 
       if options[:output_report]
         Puppet.notice("Writing report to disk: #{options[:output_report]}")
-        File.open(options[:output_report], 'w') do |f|
-          f.write(JSON.pretty_generate(nodes))
-        end
+        File.write(options[:output_report], JSON.pretty_generate(nodes))
       end
 
       nodes
