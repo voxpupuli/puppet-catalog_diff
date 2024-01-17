@@ -1,5 +1,5 @@
 class catalog_diff::viewer (
-  String  $remote    = 'https://github.com/camptocamp/puppet-catalog-diff-viewer.git',
+  String  $remote    = 'https://github.com/voxpupuli/puppet-catalog-diff-viewer.git',
   String  $password  = 'puppet',
   String  $revision  = 'master',
   Integer $port      = 1495,
