@@ -2,5 +2,10 @@
 # See https://github.com/puppetlabs/puppetlabs_spec_helper#using-fixtures for details
 ---
 fixtures:
-  forge_modules:
-#     stdlib: "puppetlabs/stdlib"
+  repositories:
+    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
+    apache: https://github.com/puppetlabs/puppetlabs-apache.git
+    htpasswd: https://github.com/citrininfo/puppet-htpasswd.git
+    vcsrepo: https://github.com/puppetlabs/puppetlabs-vcsrepo.git
+    git: https://github.com/puppetlabs-toy-chest/puppetlabs-git.git
+    concat: https://github.com/puppetlabs/puppetlabs-concat.git
