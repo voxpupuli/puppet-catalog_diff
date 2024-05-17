@@ -123,6 +123,10 @@ Puppet::Face.define(:catalog, '0.0.1') do
       default_to { puppetdb_url }
     end
 
+    option '--derive_trusted_facts' do
+      summary 'Derive trusted facts from node name when using certless API. When disabled, Puppet will use trusted facts from PuppetDB.'
+    end
+
     description <<-EOT
       Prints the differences between catalogs compiled by different puppet master to help
       during migrating to a new Puppet version.
@@ -226,7 +230,8 @@ Puppet::Face.define(:catalog, '0.0.1') do
           old_puppetserver_tls_key: options[:old_puppetserver_tls_key],
           old_puppetserver_tls_ca: options[:old_puppetserver_tls_ca],
           new_puppetdb: options[:new_puppetdb],
-          node_list: options[:node_list]
+          node_list: options[:node_list],
+          derive_trusted_facts: options[:derive_trusted_facts]
         )
         diff_output = Puppet::Face[:catalog, '0.0.1'].diff(old_catalogs, new_catalogs, options)
         nodes = diff_output

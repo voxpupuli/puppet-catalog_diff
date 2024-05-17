@@ -93,6 +93,10 @@ Puppet::Face.define(:catalog, '0.0.1') do
       summary 'A manual list of nodes to run catalog diffs against'
     end
 
+    option '--derive_trusted_facts' do
+      summary 'Derive trusted facts from node name when using certless API. When disabled, Puppet will use trusted facts from PuppetDB.'
+    end
+
     description <<-EOT
       This action is used to seed a series of catalogs from two servers
     EOT
@@ -147,14 +151,16 @@ Puppet::Face.define(:catalog, '0.0.1') do
                   puppetdb_tls_ca: options[:old_puppetdb_tls_ca],
                   puppetserver_tls_cert: options[:old_puppetserver_tls_cert],
                   puppetserver_tls_key: options[:old_puppetserver_tls_key],
-                  puppetserver_tls_ca: options[:old_puppetserver_tls_ca]
+                  puppetserver_tls_ca: options[:old_puppetserver_tls_ca],
+                  derive_trusted_facts: options[:derive_trusted_facts]
                 )
                 new_server = Puppet::Face[:catalog, '0.0.1'].seed(
                   catalog2, node_name,
                   master_server: options[:new_server],
                   certless: options[:certless],
                   catalog_from_puppetdb: options[:new_catalog_from_puppetdb],
-                  puppetdb: options[:new_puppetdb]
+                  puppetdb: options[:new_puppetdb],
+                  derive_trusted_facts: options[:derive_trusted_facts]
                 )
               else
                 new_server = Puppet::Face[:catalog, '0.0.1'].seed(
@@ -162,7 +168,8 @@ Puppet::Face.define(:catalog, '0.0.1') do
                   master_server: options[:new_server],
                   certless: options[:certless],
                   catalog_from_puppetdb: options[:new_catalog_from_puppetdb],
-                  puppetdb: options[:new_puppetdb]
+                  puppetdb: options[:new_puppetdb],
+                  derive_trusted_facts: options[:derive_trusted_facts]
                 )
                 old_server = Puppet::Face[:catalog, '0.0.1'].seed(
                   catalog1, node_name,
@@ -175,7 +182,8 @@ Puppet::Face.define(:catalog, '0.0.1') do
                   puppetdb_tls_ca: options[:old_puppetdb_tls_ca],
                   puppetserver_tls_cert: options[:old_puppetserver_tls_cert],
                   puppetserver_tls_key: options[:old_puppetserver_tls_key],
-                  puppetserver_tls_ca: options[:old_puppetserver_tls_ca]
+                  puppetserver_tls_ca: options[:old_puppetserver_tls_ca],
+                  derive_trusted_facts: options[:derive_trusted_facts]
                 )
               end
               mutex.synchronize { compiled_nodes + old_server[:compiled_nodes] }

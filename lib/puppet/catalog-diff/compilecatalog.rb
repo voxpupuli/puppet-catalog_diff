@@ -12,12 +12,12 @@ module Puppet::CatalogDiff
 
     attr_reader :node_name
 
-    def initialize(node_name, save_directory, server, certless, catalog_from_puppetdb, puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca, puppetserver_tls_cert, puppetserver_tls_key, puppetserver_tls_ca)
+    def initialize(node_name, save_directory, server, certless, catalog_from_puppetdb, puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca, puppetserver_tls_cert, puppetserver_tls_key, puppetserver_tls_ca, derive_trusted_facts)
       @node_name = node_name
       catalog = if catalog_from_puppetdb
                   get_catalog_from_puppetdb(node_name, server, puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
                 else
-                  catalog = compile_catalog(node_name, server, certless, puppetserver_tls_cert, puppetserver_tls_key, puppetserver_tls_ca)
+                  catalog = compile_catalog(node_name, server, certless, puppetserver_tls_cert, puppetserver_tls_key, puppetserver_tls_ca, derive_trusted_facts)
                   clean_sensitive_parameters!(catalog)
                   clean_nested_sensitive_parameters!(catalog)
                   catalog
@@ -68,7 +68,7 @@ module Puppet::CatalogDiff
       convert_pdb(catalog)
     end
 
-    def compile_catalog(node_name, server, certless, tls_cert, tls_key, tls_ca)
+    def compile_catalog(node_name, server, certless, tls_cert, tls_key, tls_ca, derive_trusted_facts)
       Puppet.debug("Compiling catalog for #{node_name}")
       server, environment = server.split('/')
       environment ||= lookup_environment(node_name)
@@ -92,6 +92,18 @@ module Puppet::CatalogDiff
             prefer_requested_environment: true,
           },
         }
+        if derive_trusted_facts
+          body['trusted_facts'] = {
+            values: {
+              domain: node_name.split('.')[1..],
+              certname: node_name,
+              external: {},
+              hostname: node_name.split('.')[0],
+              extensions: {},
+              authenticated: 'remote',
+            },
+          }
+        end
       else
         endpoint = "/puppet/v3/catalog/#{node_name}?environment=#{environment}"
       end
