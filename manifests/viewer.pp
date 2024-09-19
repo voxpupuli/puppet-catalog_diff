@@ -1,3 +1,21 @@
+# @summary
+#   A class to configure the diff viewer webservice. For full details, see
+#   https://github.com/voxpupuli/puppet-catalog-diff-viewer
+#
+# @param remote
+#   The source git repository to fetch the catalog diff viewer tool from.
+#
+# @param password
+#   Specifiy the desired password to set for authentication into the viewer tool post installation.
+#
+# @param revision
+#   Specify the release or branch from the repository specified in $remote to utilize.
+#
+# @param port
+#   Specify the port to run the diff viewer tool on.
+#
+# @param listen_ip
+#   Specify what IP address apache should listen on for accessing the viewer tool.
 class catalog_diff::viewer (
   String  $remote    = 'https://github.com/voxpupuli/puppet-catalog-diff-viewer.git',
   String  $password  = 'puppet',
@@ -35,7 +53,7 @@ class catalog_diff::viewer (
 
   htpasswd { 'puppet':
     username    => 'puppet',
-    cryptpasswd => ht_crypt($password, $facts['dmi']['product']['uuid']),
+    cryptpasswd => htpasswd::ht_crypt($password, $facts['dmi']['product']['uuid']),
     target      => '/var/www/.htpasswd',
   }
 
