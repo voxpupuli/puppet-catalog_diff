@@ -212,7 +212,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
         # User passed us two hostnames
         old_catalogs = Dir.mktmpdir("#{catalog1.tr('/', '_')}-")
         new_catalogs = Dir.mktmpdir("#{catalog2.tr('/', '_')}-")
-        pull_output = Puppet::Face[:catalog, '0.0.1'].pull(
+        @pull_output = Puppet::Face[:catalog, '0.0.1'].pull(
           old_catalogs, new_catalogs,
           options[:fact_search],
           old_server: catalog1, new_server: catalog2,
@@ -237,7 +237,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
         nodes = diff_output
         FileUtils.rm_rf(old_catalogs)
         FileUtils.rm_rf(new_catalogs)
-        nodes[:pull_output] = pull_output
+        nodes[:pull_output] = @pull_output
         return nodes
       end
       raise 'No nodes were matched' if nodes.size.zero?
@@ -258,6 +258,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
       nodes[:total_nodes]        = total_nodes
       nodes[:date]               = Time.new.iso8601
       nodes[:all_changed_nodes]  = with_changes.keys
+      nodes[:pull_output]        = @pull_output unless @pull_output.nil?
 
       if options[:output_report]
         Puppet.notice("Writing report to disk: #{options[:output_report]}")
