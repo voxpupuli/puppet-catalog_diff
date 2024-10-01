@@ -12,7 +12,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
 
     option '--master_server SERVER' do
       summary 'The server from which to download the catalogs from'
-      default_to { Facter.value('fqdn') }
+      default_to { Facter.value('networkin.fqdn') }
     end
 
     option '--certless' do
