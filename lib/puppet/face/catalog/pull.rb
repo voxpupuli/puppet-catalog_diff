@@ -19,7 +19,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
     option '--new_server=' do
       summary 'This the valid certificate name or alt name for your old server'
 
-      default_to { Facter.value('fqdn') }
+      default_to { Facter.value('networking.fqdn') }
     end
 
     option '--threads=' do
