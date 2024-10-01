@@ -58,6 +58,10 @@ Puppet::Face.define(:catalog, '0.0.1') do
       default_to { localcacert }
     end
 
+    option '--derive_trusted_facts' do
+      summary 'Derive trusted facts from node name when using certless API. When disabled, Puppet will use trusted facts from PuppetDB.'
+    end
+
     description <<-EOT
       This action is used to seed a series of catalogs to then be compared with diff
     EOT
@@ -109,7 +113,8 @@ Puppet::Face.define(:catalog, '0.0.1') do
                 options[:puppetdb_tls_ca],
                 options[:puppetserver_tls_cert],
                 options[:puppetserver_tls_key],
-                options[:puppetserver_tls_ca]
+                options[:puppetserver_tls_ca],
+                options[:derive_trusted_facts]
               )
               mutex.synchronize { compiled_nodes << node_name }
             rescue Exception => e
