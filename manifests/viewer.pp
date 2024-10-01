@@ -1,3 +1,12 @@
+#
+# @summary installs the catalog-diff viewer
+#
+# @param remote the url to the git repo of the catalog diff viewer
+# @param password password for basic authentication
+# @param revision the desired branch/rev that you want to checkout
+# @param port where apache will listen on
+# @param listen_ip the desired ip adddress to listen on
+#
 class catalog_diff::viewer (
   String  $remote    = 'https://github.com/voxpupuli/puppet-catalog-diff-viewer.git',
   String  $password  = 'puppet',
