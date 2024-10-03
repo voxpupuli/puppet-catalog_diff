@@ -63,7 +63,7 @@ module Puppet::CatalogDiff
     def find_nodes_puppetdb(env, puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
       puppetdb_version = get_puppetdb_version(puppetdb, puppetdb_tls_cert, puppetdb_tls_key, puppetdb_tls_ca)
       query = build_query(env, puppetdb_version)
-      json_query = URI.escape(query.to_json)
+      json_query = URI.encode_www_form_component(query.to_json)
       headers = { 'Accept' => 'application/json' }
       Puppet.debug("Querying #{puppetdb} for environment #{env}")
       begin
@@ -74,7 +74,7 @@ module Puppet::CatalogDiff
           puppetdb_version = '2.3'
           Puppet.debug("Query returned HTTP code #{result.code}. Falling back to older version of API used in PuppetDB version #{puppetdb_version}.")
           query = build_query(env, puppetdb_version)
-          json_query = URI.escape(query.to_json)
+          json_query = URI.encode_www_form_component(query.to_json)
           result = Puppet.runtime[:http].get(URI("#{puppetdb}/pdb/query/v4/nodes?query=#{json_query}"), headers: headers)
         end
         filtered = PSON.parse(result.body)
