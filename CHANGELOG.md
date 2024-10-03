@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.1.0](https://github.com/voxpupuli/puppet-catalog_diff/tree/v4.1.0) (2024-10-03)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v4.0.1...v4.1.0)
+
+**Implemented enhancements:**
+
+- Allow trusted facts to be derived from node name [\#110](https://github.com/voxpupuli/puppet-catalog_diff/pull/110) ([nabertrand](https://github.com/nabertrand))
+- reports: create them human readable [\#103](https://github.com/voxpupuli/puppet-catalog_diff/pull/103) ([bastelfreak](https://github.com/bastelfreak))
+- log destination for compiled catalogs [\#102](https://github.com/voxpupuli/puppet-catalog_diff/pull/102) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Fix failed nodes report [\#108](https://github.com/voxpupuli/puppet-catalog_diff/pull/108) ([edward-harley](https://github.com/edward-harley))
+
+**Merged pull requests:**
+
+- Replace remaining invocations of obsolete URI.escape [\#123](https://github.com/voxpupuli/puppet-catalog_diff/pull/123) ([vchepkov](https://github.com/vchepkov))
+- FacterDB: Switch to stringified facts [\#121](https://github.com/voxpupuli/puppet-catalog_diff/pull/121) ([bastelfreak](https://github.com/bastelfreak))
+- Delete unused spec\_helper\_local.rb [\#120](https://github.com/voxpupuli/puppet-catalog_diff/pull/120) ([bastelfreak](https://github.com/bastelfreak))
+- document all parameters with puppet-strings [\#119](https://github.com/voxpupuli/puppet-catalog_diff/pull/119) ([bastelfreak](https://github.com/bastelfreak))
+- Replace legacy `fqdn` fact with `networking.fqdn` [\#118](https://github.com/voxpupuli/puppet-catalog_diff/pull/118) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v4.0.1](https://github.com/voxpupuli/puppet-catalog_diff/tree/v4.0.1) (2023-08-01)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v4.0.0...v4.0.1)
