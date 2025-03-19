@@ -4,7 +4,7 @@
   "author": "Vox Pupuli",
   "summary": "Compares two catalogs and shows the differences",
   "license": "Apache-2.0",
-  "source": "https://github.com/voxpupupli/puppet-catalog_diff",
+  "source": "https://github.com/voxpupuli/puppet-catalog_diff",
   "project_page": "https://github.com/voxpupuli/puppet-catalog_diff",
   "issues_url": "https://github.com/voxpupuli/puppet-catalog_diff/issues",
   "dependencies": [
