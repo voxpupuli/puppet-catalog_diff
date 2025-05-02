@@ -5,7 +5,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
   action :seed do
     summary 'Generate a series of catalogs'
     arguments '<path/to/seed/directory> fact=CaseSensitiveValue'
-    puppetdb_url = Puppet::CatalogDiff::Puppetdbfactory.puppetdb_url()
+    puppetdb_url = Puppet::CatalogDiff::Puppetdbfactory.puppetdb_url
     hostcert = Puppet.settings[:hostcert]
     hostprivkey = Puppet.settings[:hostprivkey]
     localcacert = Puppet.settings[:localcacert]

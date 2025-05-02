@@ -6,7 +6,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
   action :pull do
     summary 'Pull catalogs from duel puppet masters'
     arguments '/tmp/old_catalogs /tmp/new_catalogs'
-    puppetdb_url = Puppet::CatalogDiff::Puppetdbfactory.puppetdb_url()
+    puppetdb_url = Puppet::CatalogDiff::Puppetdbfactory.puppetdb_url
     hostcert = Puppet.settings[:hostcert]
     hostprivkey = Puppet.settings[:hostprivkey]
     localcacert = Puppet.settings[:localcacert]

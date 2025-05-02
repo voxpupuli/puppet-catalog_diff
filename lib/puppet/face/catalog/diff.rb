@@ -13,7 +13,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
   action :diff do
     summary 'Compare catalogs from different puppet versions.'
     arguments '<catalog1> <catalog2>'
-    puppetdb_url = Puppet::CatalogDiff::Puppetdbfactory.puppetdb_url()
+    puppetdb_url = Puppet::CatalogDiff::Puppetdbfactory.puppetdb_url
     hostcert = Puppet.settings[:hostcert]
     hostprivkey = Puppet.settings[:hostprivkey]
     localcacert = Puppet.settings[:localcacert]
