@@ -4,7 +4,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'catalog-
 
 Puppet::Face.define(:catalog, '0.0.1') do
   action :pull do
-    description 'Pull catalogs from duel puppet masters'
+    summary 'Pull catalogs from duel puppet masters'
     arguments '/tmp/old_catalogs /tmp/new_catalogs'
     puppetdb_url = Puppet::CatalogDiff::Puppetdbfactory.puppetdb_url()
     hostcert = Puppet.settings[:hostcert]
