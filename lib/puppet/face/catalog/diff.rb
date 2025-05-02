@@ -147,10 +147,11 @@ Puppet::Face.define(:catalog, '0.0.1') do
       - At this point you should have 2 different catalogs. To compare them run:
 
           puppet catalog diff <catalog1> <catalog2>
+
       - Alternatively you can process a directory containing matching files
       - i.e. path/to/old/node_name.yaml and path/to/new/node_name.yaml
 
-            puppet catalog diff <path/to/old> <path/to/new>
+          puppet catalog diff <path/to/old> <path/to/new>
 
       This code only validates the catalogs, it cannot tell you if the behavior of
       the providers that interpret the catalog has changed so testing is still
