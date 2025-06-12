@@ -1,15 +1,13 @@
 {
   "name": "puppet-catalog_diff",
-  "version": "4.1.1-rc0",
+  "version": "4.2.0",
   "author": "Vox Pupuli",
   "summary": "Compares two catalogs and shows the differences",
   "license": "Apache-2.0",
   "source": "https://github.com/voxpupuli/puppet-catalog_diff",
   "project_page": "https://github.com/voxpupuli/puppet-catalog_diff",
   "issues_url": "https://github.com/voxpupuli/puppet-catalog_diff/issues",
-  "dependencies": [
-
-  ],
+  "dependencies": [],
   "operatingsystem_support": [
     {
       "operatingsystem": "CentOS",
