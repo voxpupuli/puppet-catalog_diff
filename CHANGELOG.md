@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.2.0](https://github.com/voxpupuli/puppet-catalog_diff/tree/v4.2.0) (2025-06-12)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v4.1.0...v4.2.0)
+
+**Implemented enhancements:**
+
+- metadata.json: Add OpenVox [\#131](https://github.com/voxpupuli/puppet-catalog_diff/pull/131) ([jstraw](https://github.com/jstraw))
+- Replace PSON with JSON for compatibility with Puppet 8 [\#127](https://github.com/voxpupuli/puppet-catalog_diff/pull/127) ([lcharreau](https://github.com/lcharreau))
+
+**Fixed bugs:**
+
+- Fix for resources that have a parameter named `type` [\#134](https://github.com/voxpupuli/puppet-catalog_diff/pull/134) ([alexjfisher](https://github.com/alexjfisher))
+- metadata.json has wrong source [\#129](https://github.com/voxpupuli/puppet-catalog_diff/pull/129) ([LirionOSS](https://github.com/LirionOSS))
+
+**Closed issues:**
+
+- metadata.json has wrong source [\#128](https://github.com/voxpupuli/puppet-catalog_diff/issues/128)
+
 ## [v4.1.0](https://github.com/voxpupuli/puppet-catalog_diff/tree/v4.1.0) (2024-10-03)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v4.0.1...v4.1.0)
