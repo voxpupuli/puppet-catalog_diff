@@ -283,7 +283,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
             value.map do |resource_id, resource|
               next if resource.nil?
 
-              if resource.is_a?(Hash) && resource.key?(:type)
+              if resource.is_a?(Hash) && resource.key?(:type) && !%i[params_in_old params_in_new].include?(header)
                 # If we find an actual resource print it out
                 format.resource_reference(header, resource_id, resource)
               elsif resource.is_a?(Array)
