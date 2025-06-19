@@ -293,6 +293,12 @@ via CLI options Those are:
 * `--old_puppetdb_tls_key=`
 * `--old_puppetdb_tls_ca=`
 
+#### Use without PuppetDB
+
+It is possible to use this module without PuppetDB.
+If the libraries for PuppetDB are not installed, the module will set the
+puppet_url parameter to `https://puppetdb:8081` and will not use PuppetDB.
+
 ### Non-default Puppetserver
 
 `puppet catalog diff` can request an old catalog from a Puppetserver. The
