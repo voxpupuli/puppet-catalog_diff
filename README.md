@@ -24,14 +24,20 @@
 1. [Usage](#usage)
     1. [Multi threaded compile requests](#multi-threaded-compile-requests)
     1. [Fact search](#fact-search)
+    1. [Node list](#node-list)
     1. [Changed depth](#changed-depth)
-    1. [Output report](#output-report)
+    1. [Output Report](#output-report)
+    1. [Non-default PuppetDB/Configuring PuppetDB](#non-default-puppetdbconfiguring-puppetdb)
+        1. [Use without PuppetDB](#use-without-puppetdb)
+    1. [Non-default Puppetserver](#non-default-puppetserver)
 1. [Limitations](#limitations)
 1. [Previous Authors](#previous-authors)
 1. [Contributors](#contributors)
-1. [See Also](#see-also)
+1. [See also](#see-also)
     1. [Upload facts to PuppetDB](#upload-facts-to-puppetdb)
     1. [Modern fact submission](#modern-fact-submission)
+    1. [complex fact submission](#complex-fact-submission)
+    1. [Further documentation](#further-documentation)
 
 
 ## Overview
