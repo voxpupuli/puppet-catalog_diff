@@ -14,7 +14,7 @@
 ![Catalog Diff](https://raw.githubusercontent.com/voxpupuli/puppet-catalog_diff/master/catalog-diff.png)
 
 
-#### Table of Contents
+# Table of Contents
 
 1. [Overview](#overview)
 1. [Module Description](#module-description)
