@@ -1,6 +1,6 @@
 require 'puppet/face'
 require 'json'
-require 'puppet/util/puppetdb'
+require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'catalog-diff', 'puppetdbfactory.rb'))
 
 begin
   require 'parallel'
@@ -13,7 +13,7 @@ Puppet::Face.define(:catalog, '0.0.1') do
   action :diff do
     summary 'Compare catalogs from different puppet versions.'
     arguments '<catalog1> <catalog2>'
-    puppetdb_url = Puppet::Util::Puppetdb.config.server_urls[0]
+    puppetdb_url = Puppet::CatalogDiff::Puppetdbfactory.puppetdb_url
     hostcert = Puppet.settings[:hostcert]
     hostprivkey = Puppet.settings[:hostprivkey]
     localcacert = Puppet.settings[:localcacert]
@@ -136,20 +136,22 @@ Puppet::Face.define(:catalog, '0.0.1') do
 
       Validation Process:
 
-       - Grab a catalog from your existing machine running the old version
-       - Configure your new Puppet master, copy the facts from your old master
-         to the new one
-       - Compile the catalog for this host on the new master:
+      - Grab a catalog from your existing machine running the old version
+      - Configure your new Puppet master, copy the facts from your old master
+        to the new one
+      - Compile the catalog for this host on the new master:
 
-            puppet master --compile fqdn > fqdn.pson
+          puppet master --compile fqdn > fqdn.pson
 
-       - Puppet puts a header in some catalogs compiled in this way, remove it if present
-       - At this point you should have 2 different catalogs. To compare them run:
+      - Puppet puts a header in some catalogs compiled in this way, remove it if present
+      - At this point you should have 2 different catalogs. To compare them run:
 
-            puppet catalog diff <catalog1> <catalog2>
-       - Alternatively you can process a directory containing matching files
-       - i.e. path/to/old/node_name.yaml and path/to/new/node_name.yaml
-                   puppet catalog diff <path/to/old> <path/to/new>
+          puppet catalog diff <catalog1> <catalog2>
+
+      - Alternatively you can process a directory containing matching files
+      - i.e. path/to/old/node_name.yaml and path/to/new/node_name.yaml
+
+          puppet catalog diff <path/to/old> <path/to/new>
 
       This code only validates the catalogs, it cannot tell you if the behavior of
       the providers that interpret the catalog has changed so testing is still
