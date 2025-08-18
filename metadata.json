@@ -1,6 +1,6 @@
 {
   "name": "puppet-catalog_diff",
-  "version": "4.3.0",
+  "version": "5.0.0",
   "author": "Vox Pupuli",
   "summary": "Compares two catalogs and shows the differences",
   "license": "Apache-2.0",
