@@ -14,7 +14,7 @@
 ![Catalog Diff](https://raw.githubusercontent.com/voxpupuli/puppet-catalog_diff/master/catalog-diff.png)
 
 
-#### Table of Contents
+# Table of Contents
 
 1. [Overview](#overview)
 1. [Module Description](#module-description)
@@ -24,14 +24,20 @@
 1. [Usage](#usage)
     1. [Multi threaded compile requests](#multi-threaded-compile-requests)
     1. [Fact search](#fact-search)
+    1. [Node list](#node-list)
     1. [Changed depth](#changed-depth)
-    1. [Output report](#output-report)
+    1. [Output Report](#output-report)
+    1. [Non-default PuppetDB/Configuring PuppetDB](#non-default-puppetdbconfiguring-puppetdb)
+        1. [Use without PuppetDB](#use-without-puppetdb)
+    1. [Non-default Puppetserver](#non-default-puppetserver)
 1. [Limitations](#limitations)
 1. [Previous Authors](#previous-authors)
 1. [Contributors](#contributors)
-1. [See Also](#see-also)
+1. [See also](#see-also)
     1. [Upload facts to PuppetDB](#upload-facts-to-puppetdb)
     1. [Modern fact submission](#modern-fact-submission)
+    1. [complex fact submission](#complex-fact-submission)
+    1. [Further documentation](#further-documentation)
 
 
 ## Overview
@@ -292,6 +298,12 @@ via CLI options Those are:
 * `--old_puppetdb_tls_cert=`
 * `--old_puppetdb_tls_key=`
 * `--old_puppetdb_tls_ca=`
+
+#### Use without PuppetDB
+
+It is possible to use this module without PuppetDB.
+If the libraries for PuppetDB are not installed, the module will set the
+puppet_url parameter to `https://puppetdb:8081` and will not use PuppetDB.
 
 ### Non-default Puppetserver
 
