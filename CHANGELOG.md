@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.3.0](https://github.com/voxpupuli/puppet-catalog_diff/tree/v4.3.0) (2025-08-18)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v4.2.0...v4.3.0)
+
+**Breaking changes:**
+
+- Drop puppet, update openvox minimum version to 8.19 [\#139](https://github.com/voxpupuli/puppet-catalog_diff/pull/139) ([TheMeier](https://github.com/TheMeier))
+
+**Implemented enhancements:**
+
+- make puppetdb-termini optional [\#132](https://github.com/voxpupuli/puppet-catalog_diff/pull/132) ([zipkid](https://github.com/zipkid))
+
+**Merged pull requests:**
+
+- docs: trivial fix for anchor name [\#125](https://github.com/voxpupuli/puppet-catalog_diff/pull/125) ([waipeng](https://github.com/waipeng))
+
 ## [v4.2.0](https://github.com/voxpupuli/puppet-catalog_diff/tree/v4.2.0) (2025-06-12)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v4.1.0...v4.2.0)
