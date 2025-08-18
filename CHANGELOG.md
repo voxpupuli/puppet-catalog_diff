@@ -4,9 +4,9 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v4.3.0](https://github.com/voxpupuli/puppet-catalog_diff/tree/v4.3.0) (2025-08-18)
+## [v5.0.0](https://github.com/voxpupuli/puppet-catalog_diff/tree/v5.0.0) (2025-08-18)
 
-[Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v4.2.0...v4.3.0)
+[Full Changelog](https://github.com/voxpupuli/puppet-catalog_diff/compare/v4.2.0...v5.0.0)
 
 **Breaking changes:**
 
