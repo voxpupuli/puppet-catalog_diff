@@ -255,8 +255,8 @@ Puppet::Face.define(:catalog, '0.0.1') do
       total_nodes = nodes.size
       nodes[:total_percentage]   = (nodes.map { |_node, summary| (summary.is_a?(Hash) && summary[:node_percentage]) || nil }.compact.reduce { |acc, elem| acc.to_f + elem } / total_nodes)
       nodes[:with_changes]       = with_changes.size
-      nodes[:most_changed]       = most_changed.reverse.take(((options.key?(:changed_depth) && options[:changed_depth].to_i) || 10))
-      nodes[:most_differences]   = most_differences.reverse.take(((options.key?(:changed_depth) && options[:changed_depth].to_i) || 10))
+      nodes[:most_changed]       = most_changed.reverse.take((options.key?(:changed_depth) && options[:changed_depth].to_i) || 10)
+      nodes[:most_differences]   = most_differences.reverse.take((options.key?(:changed_depth) && options[:changed_depth].to_i) || 10)
       nodes[:total_nodes]        = total_nodes
       nodes[:date]               = Time.new.iso8601
       nodes[:all_changed_nodes]  = with_changes.keys

@@ -33,7 +33,7 @@ module Puppet::CatalogDiff
 
         resource = { type: target.type,
                      title: target.title,
-                     parameters: {} }
+                     parameters: {}, }
 
         target.each do |param, value|
           resource[:parameters][param] = value

@@ -27,7 +27,7 @@ module Puppet::CatalogDiff
       str = ''
       str << indent if do_indent
       str << '{' << "\n"
-      keys = (v.sort_by { |key, _val| key }).to_h
+      keys = v.sort_by { |key, _val| key }.to_h
       keys.each_pair do |key, val|
         str << "\t     #{indent}     #{key} => "
         str << format_value(val, "#{indent}     ", true, ',', key)
@@ -51,7 +51,7 @@ module Puppet::CatalogDiff
     def resource_to_string(resource)
       str = ''
       str << "\t#{resource[:type].downcase}" << '{"' << resource[:title].to_s << '":' << "\n"
-      params = (resource[:parameters].sort_by { |k, _v| k }).to_h
+      params = resource[:parameters].sort_by { |k, _v| k }.to_h
       params.each_pair do |k, v|
         str << "\t     #{k} => "
         indent = ' ' * k.to_s.size
@@ -104,7 +104,7 @@ module Puppet::CatalogDiff
       list = value.map do |hash|
         number += 1
         hash.map do |key, val|
-          header_spacing = ' ' * (79 - ("#{number}. #{key}".length + (((mark == '%' && ('%.2f' % val)) || val)).to_s.to_s.length))
+          header_spacing = ' ' * (79 - ("#{number}. #{key}".length + ((mark == '%' && ('%.2f' % val)) || val).to_s.length))
           "#{number}. #{key}#{header_spacing}#{(mark == '%' && ('%.2f' % val)) || val}#{mark}"
         end
       end.join("\n")
