@@ -45,10 +45,10 @@ module Puppet::CatalogDiff
 
         next if new_resource[:parameters] == resource[:parameters]
 
-        parameters_in_old[resource[:resource_id]] = \
+        parameters_in_old[resource[:resource_id]] =
           (resource[:parameters].to_a - new_resource[:parameters].to_a).to_h
 
-        parameters_in_new[resource[:resource_id]] = \
+        parameters_in_new[resource[:resource_id]] =
           (new_resource[:parameters].to_a - resource[:parameters].to_a).to_h
 
         if options[:show_resource_diff]
@@ -56,7 +56,7 @@ module Puppet::CatalogDiff
 
           diff_array = str_diff(
             Puppet::CatalogDiff::Formater.new.resource_to_string(resource),
-            Puppet::CatalogDiff::Formater.new.resource_to_string(new_resource)
+            Puppet::CatalogDiff::Formater.new.resource_to_string(new_resource),
           ).split("\n")
           if diff_array.size >= 3
             string_differences[resource[:resource_id]] = diff_array[3..-1]
